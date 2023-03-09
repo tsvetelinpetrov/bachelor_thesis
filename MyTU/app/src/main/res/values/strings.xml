@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">MyTU</string>
+
+    <!--Navigation menu strings-->
+    <string name="bottom_menu_1">Карта</string>
+    <string name="bottom_menu_2">Разписи</string>
+    <string name="bottom_menu_3">ЧЗВ</string>
+    <string name="bottom_menu_4">Още</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
