@@ -10,57 +10,91 @@ import android.view.ViewGroup;
 
 import com.tuvarna.mytu.R;
 
+import org.osmdroid.api.IMapController;
+import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.util.MapTileIndex;
+import org.osmdroid.views.CustomZoomButtonsController;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MapFragment#newInstance} factory method to
+ * Use the {@link MapFragment} factory method to
  * create an instance of this fragment.
  */
 public class MapFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private MapView map = null;
 
     public MapFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MapFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MapFragment newInstance(String param1, String param2) {
-        MapFragment fragment = new MapFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map, container, false);
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
+
+        this.map = view.findViewById(R.id.map);
+        //map.setTileSource(TileSourceFactory.MAPNIK);
+        this.map.setTileSource(new OnlineTileSourceBase("USGS Topo", 0, 18, 256, ".png?key=yourkeyandnotthisstringorxxxxx",
+                new String[] { "http://creativecode.tu-varna.bg/mapsource/" }) {
+
+            @Override
+            public String getTileURLString(long pMapTileIndex) {
+                return getBaseUrl()
+                        + MapTileIndex.getZoom(pMapTileIndex)
+                        + "/" + MapTileIndex.getX(pMapTileIndex)
+                        + "/" + MapTileIndex.getY(pMapTileIndex)
+                        + mImageFilenameEnding;
+            }
+        });
+
+        this.map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
+        this.map.setMultiTouchControls(true);
+        this.map.setMinZoomLevel(18.5);
+        this.map.setTilesScaledToDpi(false);
+        this.map.setScrollableAreaLimitLatitude(43.225418, 43.222118, 0);
+        this.map.setScrollableAreaLimitLongitude(27.932039, 27.940900, 0);
+
+        IMapController mapController = this.map.getController();
+        mapController.setZoom(5.5);
+        GeoPoint startPoint = new GeoPoint(43.223401, 27.935145);
+        mapController.setCenter(startPoint);
+
+        RotationGestureOverlay mRotationGestureOverlay = new RotationGestureOverlay(this.map);
+        mRotationGestureOverlay.setEnabled(true);
+        this.map.setMultiTouchControls(true);
+        this.map.getOverlays().add(mRotationGestureOverlay);
+
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //this will refresh the osmdroid configuration on resuming.
+        //if you make changes to the configuration, use
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+        this.map.onResume(); //needed for compass, my location overlays, v6.0.0 and up
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //this will refresh the osmdroid configuration on resuming.
+        //if you make changes to the configuration, use
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //Configuration.getInstance().save(this, prefs);
+        this.map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
     }
 }
