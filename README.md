@@ -10,6 +10,8 @@
   <p align="center">  
     Bachelor thesis, 2023, TU Varna  
     <br />  
+    Tsvetelin Petrov
+    <br />  
     <a href="https://github.com/tsvetelinpetrov/bachelor_thesis/issues">Report Bug</a>  
     ·  
     <a href="https://github.com/tsvetelinpetrov/bachelor_thesis/issues">Request Feature</a>  
@@ -20,8 +22,8 @@
 <details>  
   <summary>Съдържание</summary>  
   <ol>  
-    <li><a href="#за-проекта">За проекта</a></li>  
-    <li><a href="#roadmap">Roadmap</a></li>  
+    <li><a href="#задание">Задание</a></li>  
+    <li><a href="#Функционалниизисквания">Функционални изисквания</a></li>
   </ol>  
 </details>  
   
@@ -48,6 +50,7 @@
 #### <a href="https://www.mazemap.com" target="BLANK">  MazeMap</a>
 <img src="src/mazemap_ss.jpg" alt="MazeMap 2" width="100%">  
 
+## Фаза на проектиране
 ### Спецификации
 За осъществяване на обособените функционалности е необходимо да се изгради система, базирана на архитектурата клиент-сървър.
 <img src="src/system_architecture.png" alt="System Architecture" width="100%">  
@@ -87,6 +90,14 @@
 
 Ъпдейтването на текущото местоположение на потребителя ще се извършва чрез сканиране на QR код или чрез прочитане на NFC таг. Кодовете и таговете ще бъдат разположени на ключови места, отговарящи и на графа за търсене на път.
 <img src="src/nuk_nfc.jpg" alt="NUK BFC Tag" width="100%">
+
+### Wireframe
+<img src="src/wireframe.png" alt="Wireframe" width="100%">
+
+### Прототип
+<img src="src/example_ui1.jpg" alt="Prototype" width="100%">
+
+! Wireframe и прототипните изображения не са напълно съответстващи на описанието по-горе. Ще ги редактирам скоро !
 
 
 
