@@ -92,7 +92,7 @@
 <img src="src/nuk_nfc.jpg" alt="NUK BFC Tag" width="100%">
 
 ### DB Model
-<img src="src/db_model.png" alt="Wireframe" width="100%">
+<img src="src/db_model.jpg" alt="DB Model" width="100%">
 
 ### Wireframe
 <img src="src/wireframe.png" alt="Wireframe" width="100%">
