@@ -46,9 +46,7 @@
 ## Фаза на проучване
 ### Съществуващи системи
 #### <a href="https://www.mazemap.com" target="BLANK">  MazeMap</a>
-<img src="src/mazemap_2.jpg" alt="MazeMap 2" width="30%">  
-<img src="src/mazemap_3.jpg" alt="MazeMap 3" width="30%">  
-<img src="src/mazemap_4.jpg" alt="MazeMap 4" width="30%">  
+<img src="src/mazemap_ss.jpg" alt="MazeMap 2" width="100%">  
 
 
   
