@@ -2,7 +2,7 @@
 <br />  
 <div align="center">  
   <a href="https://github.com/tsvetelinpetrov/bachelor_thesis">  
-    <img src="src/Logo_blue.png" alt="Logo" width="250">
+    <img src="src/Logo_blue.png" alt="Logo" width="450">
   </a>  
   
 <h3 align="center">MyTU</h3>  
