@@ -95,7 +95,7 @@
 <img src="src/wireframe.png" alt="Wireframe" width="100%">
 
 ### Прототип
-<img src="src/example_ui1.jpg" alt="Prototype" width="100%">
+<img src="src/example_ui1.png" alt="Prototype" width="100%">
 
 ! Wireframe и прототипните изображения не са напълно съответстващи на описанието по-горе. Ще ги редактирам скоро !
 
