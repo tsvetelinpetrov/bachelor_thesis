@@ -48,6 +48,9 @@
 #### <a href="https://www.mazemap.com" target="BLANK">  MazeMap</a>
 <img src="src/mazemap_ss.jpg" alt="MazeMap 2" width="100%">  
 
+### Спецификации
+За осъществяване на обособените функционалности е необходимо да се изгради система, базирана на архитектурата клиент-сървър.
+<img src="src/system_architecture.png" alt="System Architecture" width="100%">  
 
   
 <p align="right">(<a href="#top">нагоре</a>)</p>  
