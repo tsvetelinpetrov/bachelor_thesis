@@ -91,6 +91,9 @@
 Ъпдейтването на текущото местоположение на потребителя ще се извършва чрез сканиране на QR код или чрез прочитане на NFC таг. Кодовете и таговете ще бъдат разположени на ключови места, отговарящи и на графа за търсене на път.
 <img src="src/nuk_nfc.jpg" alt="NUK BFC Tag" width="100%">
 
+### DB Model
+<img src="src/db_model.png" alt="Wireframe" width="100%">
+
 ### Wireframe
 <img src="src/wireframe.png" alt="Wireframe" width="100%">
 
