@@ -1,4 +1,4 @@
-package com.tuvarna.mytu.Fragments;
+package com.tuvarna.mytu.ui.fragments;
 
 import android.os.Bundle;
 

@@ -7,22 +7,22 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.tuvarna.mytu.Fragments.MapFragment"
+        android:name="com.tuvarna.mytu.ui.fragments.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/calendarFragment"
-        android:name="com.tuvarna.mytu.Fragments.CalendarFragment"
+        android:name="com.tuvarna.mytu.ui.fragments.CalendarFragment"
         android:label="fragment_calendar"
         tools:layout="@layout/fragment_calendar" />
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.tuvarna.mytu.Fragments.ChatFragment"
+        android:name="com.tuvarna.mytu.ui.fragments.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" />
     <fragment
         android:id="@+id/moreFragment"
-        android:name="com.tuvarna.mytu.Fragments.MoreFragment"
+        android:name="com.tuvarna.mytu.ui.fragments.MoreFragment"
         android:label="fragment_more"
         tools:layout="@layout/fragment_more" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.tuvarna.mytu;
+package com.tuvarna.mytu.ui;
 
 import static androidx.navigation.ui.BottomNavigationViewKt.setupWithNavController;
 
@@ -9,6 +9,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.tuvarna.mytu.R;
 
 import java.util.Objects;
 
