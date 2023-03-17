@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 
-namespace MyTU_api.Data
+namespace MyTU_api.Infrastructure
 {
-    public class AppDbContext : DbContext
+    public class MyTU_apiDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
+        public MyTU_apiDbContext(DbContextOptions<MyTU_apiDbContext> options)
             : base(options)
         {
 

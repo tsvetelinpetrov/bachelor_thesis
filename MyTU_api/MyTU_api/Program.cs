@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using MyTU_api.Data;
+using MyTU_api.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 var serverVersion = new MySqlServerVersion(new Version(5, 7, 0)); // Must be on version 5.7.0 = MariaDB (10.2.X)
@@ -8,7 +8,7 @@ var conf = builder.Configuration;
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
-builder.Services.AddDbContext<AppDbContext>(options => {
+builder.Services.AddDbContext<MyTU_apiDbContext>(options => {
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnectionString"), serverVersion);
 });
 builder.Services.AddEndpointsApiExplorer();
@@ -45,3 +45,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+
+// FluentValidation midlewear
+// Mock -> Unit testing
