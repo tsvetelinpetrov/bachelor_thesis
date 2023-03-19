@@ -5,7 +5,7 @@
 MyTU_api requires [VS Studio 2022](https://visualstudio.microsoft.com/vs/) and .NET 6.0 to build and run.
 
 ### Migrations
-Open Tools -> NuGet Package Manager -> Packet Manager Console (Alt + T + N + O)
+Open Tools -> NuGet Package Manager -> Packet Manager Console (<kbd>Alt</kbd> + <kbd>T</kbd> + <kbd>N</kbd> + <kbd>O</kbd>)
 
 #### Create new migration
 ```sh
