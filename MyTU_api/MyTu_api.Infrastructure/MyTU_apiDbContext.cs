@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using MyTU_api.Entities;
 
 namespace MyTU_api.Infrastructure
 {
@@ -10,6 +11,12 @@ namespace MyTU_api.Infrastructure
         {
 
         }
+
+        public DbSet<Building> Buildings { get; set; }
+        public DbSet<BuildingPoint> BuildingsPoint { get; set; }
+        public DbSet<Label> Labels { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<RoomPoint> RoomPoints { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
