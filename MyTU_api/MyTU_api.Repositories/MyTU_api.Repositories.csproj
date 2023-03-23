@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MyTu_api.Infrastructure\MyTU_api.Infrastructure.csproj" />
+    <ProjectReference Include="..\MyTU_api.Models\MyTU_api.Models.csproj" />
+  </ItemGroup>
+
 </Project>

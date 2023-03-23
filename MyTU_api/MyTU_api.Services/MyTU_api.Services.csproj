@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MyTU_api.Repositories\MyTU_api.Repositories.csproj" />
+  </ItemGroup>
+
 </Project>
