@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyTU_api.Infrastructure;
+using MyTU_api.Repositories;
+using MyTU_api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +21,8 @@ builder.Services.AddSwaggerGen();
 var serverVersion = new MySqlServerVersion(new Version(5, 7, 0)); // Must be on version 5.7.0 = MariaDB (10.2.X)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString");
 builder.Services.AddDbContext<MyTU_apiDbContext>(options => {
-    options.UseMySql(
+    options.UseLazyLoadingProxies()
+    .UseMySql(
         connectionString,
         serverVersion,
         x => x.MigrationsAssembly("MyTU_api.Infrastructure"));
@@ -27,9 +30,9 @@ builder.Services.AddDbContext<MyTU_apiDbContext>(options => {
 
 
 // Add Services Scope
-//builder.Services.AddScoped<IBuildingService, BuildingService>();
-// ...
-// ...
+builder.Services.AddScoped<IBuildingService, BuildingService>();
+
+builder.Services.AddScoped<IBuildingRepository, BuildingRepository>();
 
 var app = builder.Build();
 

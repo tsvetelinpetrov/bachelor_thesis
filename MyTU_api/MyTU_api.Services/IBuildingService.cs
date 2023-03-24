@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MyTU_api.Models;
 
 namespace MyTU_api.Services
 {
     public interface IBuildingService
     {
+        Task<IEnumerable<BuildingDto>> Get();
     }
 }
