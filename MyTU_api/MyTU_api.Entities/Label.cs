@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyTU_api.Entities
+﻿namespace MyTU_api.Entities
 {
     public class Label
     {
@@ -16,7 +10,5 @@ namespace MyTU_api.Entities
         public float Rotation { get; set; }
         public double MinZoom { get; set; }
         public double MaxZoom { get; set; }
-
-
     }
 }

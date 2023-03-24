@@ -9,7 +9,7 @@ namespace MyTU_api.Infrastructure
         public MyTU_apiDbContext(DbContextOptions<MyTU_apiDbContext> options)
             : base(options)
         {
-
+            
         }
 
         public DbSet<Building> Buildings { get; set; }
@@ -17,6 +17,7 @@ namespace MyTU_api.Infrastructure
         public DbSet<Label> Labels { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<RoomPoint> RoomPoints { get; set; }
+        public DbSet<Floor> Floor { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
