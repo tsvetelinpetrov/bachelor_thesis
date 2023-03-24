@@ -4,18 +4,25 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.tuvarna.mytu.R;
+import com.tuvarna.mytu.util.CustomMapView;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.events.MapListener;
+import org.osmdroid.events.ScrollEvent;
+import org.osmdroid.events.ZoomEvent;
+import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.util.MapTileIndex;
 import org.osmdroid.views.CustomZoomButtonsController;
-import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 
 /**
@@ -25,7 +32,7 @@ import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
  */
 public class MapFragment extends Fragment {
 
-    private MapView map = null;
+    private CustomMapView map = null;
 
     public MapFragment() {
         // Required empty public constructor
@@ -45,7 +52,14 @@ public class MapFragment extends Fragment {
 
         this.map = view.findViewById(R.id.map);
         //map.setTileSource(TileSourceFactory.MAPNIK);
-        this.map.setTileSource(new OnlineTileSourceBase("USGS Topo", 0, 18, 256, ".png?key=yourkeyandnotthisstringorxxxxx",
+
+        // Create a custom tile source
+        final ITileSource tileSource = new XYTileSource( "HOT", 1, 19, 256, ".png",
+                new String[] {
+                        "http://creativecode.tu-varna.bg/mapsource/"
+                },"© OpenStreetMap contributors");
+        this.map.setTileSource(tileSource);
+        /*this.map.setTileSource(new OnlineTileSourceBase("USGS Topo", 0, 20, 256, ".png",
                 new String[] { "http://creativecode.tu-varna.bg/mapsource/" }) {
 
             @Override
@@ -55,6 +69,19 @@ public class MapFragment extends Fragment {
                         + "/" + MapTileIndex.getX(pMapTileIndex)
                         + "/" + MapTileIndex.getY(pMapTileIndex)
                         + mImageFilenameEnding;
+            }
+        });*/
+
+        this.map.addMapListener(new MapListener() {
+            @Override
+            public boolean onScroll(ScrollEvent event) {
+                return false;
+            }
+
+            @Override
+            public boolean onZoom(ZoomEvent event) {
+                Log.e("19621795", String.valueOf(map.getZoomLevelDouble()));
+                return false;
             }
         });
 
