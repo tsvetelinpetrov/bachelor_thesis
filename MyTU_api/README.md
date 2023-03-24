@@ -21,7 +21,7 @@ dotnet ef database update --startup-project ../MyTU_api
 ```
 
 # API
-| Method | URL                                    | Description                                             |
-|--------|----------------------------------------|---------------------------------------------------------|
-| `GET`  | `/api/building`                        | [List of all buildings, floors & rooms](#list)          |
-| `GET`  | `/health`                              | Server health check: returns 200 `OK`            		|
+| Method | URL                                    | Description                                             | Implemented |
+|--------|----------------------------------------|---------------------------------------------------------|-------------|
+| `GET`  | `/api/building`                        | [List of all buildings, floors & rooms](#list)          | Yes		  |
+| `GET`  | `/health`                              | Server health check: returns 200 `OK`            		| No          |
