@@ -1,4 +1,4 @@
-package com.tuvarna.mytu.ui;
+package com.tuvarna.mytu.views;
 
 import static androidx.navigation.ui.BottomNavigationViewKt.setupWithNavController;
 
