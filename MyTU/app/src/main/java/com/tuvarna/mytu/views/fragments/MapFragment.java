@@ -1,4 +1,4 @@
-package com.tuvarna.mytu.ui.fragments;
+package com.tuvarna.mytu.views.fragments;
 
 import android.os.Bundle;
 
@@ -17,11 +17,8 @@ import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
-import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.util.MapTileIndex;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 
