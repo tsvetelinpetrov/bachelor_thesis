@@ -1,0 +1,7 @@
+https://www.youtube.com/watch?v=ijXjCtCXcN4
+
+https://www.youtube.com/watch?v=Pso1MeX_HvI
+
+https://www.geeksforgeeks.org/mvvm-model-view-viewmodel-architecture-pattern-in-android/
+
+https://learn.microsoft.com/en-us/dotnet/architecture/maui/mvvm
