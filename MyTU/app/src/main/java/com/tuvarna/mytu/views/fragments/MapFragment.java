@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tuvarna.mytu.R;
+import com.tuvarna.mytu.api.ApiRequest;
+import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.util.CustomMapView;
 
 import org.osmdroid.api.IMapController;
@@ -21,6 +23,14 @@ import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -99,6 +109,8 @@ public class MapFragment extends Fragment {
         this.map.setMultiTouchControls(true);
         this.map.getOverlays().add(mRotationGestureOverlay);
 
+        downloadData();
+
         return view;
     }
 
@@ -120,5 +132,47 @@ public class MapFragment extends Fragment {
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().save(this, prefs);
         this.map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
+    }
+
+    void downloadData() {
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("http://192.168.0.100:5184/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            ApiRequest request = retrofit.create(ApiRequest.class);
+            Call<List<Building>> call = request.getBuildings();
+
+            call.enqueue(new Callback() {
+                @Override
+                public void onResponse(Call call, Response response) {
+                    if (response.isSuccessful()) {
+                        List<Building> buildings = (List<Building>) response.body();
+
+                        map.setBuildings(buildings);
+                        map.drawAll(0);
+                        longInfo(String.valueOf(response.code()));
+                    } else {
+                        longInfo(String.valueOf(response.code()));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                    //longInfo(t.getMessage());
+                }
+            });
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    public static void longInfo(String str) {
+        if (str.length() > 4000) {
+            Log.i("19621795_", str.substring(0, 4000));
+            longInfo(str.substring(4000));
+        } else
+            Log.i("19621795_", str);
     }
 }
