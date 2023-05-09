@@ -3,7 +3,7 @@ package com.tuvarna.mytu.models;
 import org.osmdroid.util.GeoPoint;
 
 public class Label {
-    String label;
+    String text;
     int size;
     int bgColor;
     int fgColor;
@@ -12,8 +12,8 @@ public class Label {
     double maxZoom;
     GeoPoint location;
 
-    public Label(String label, int size, int bgColor, int fgColor, float rotation, double minZoom, double maxZoom, GeoPoint location) {
-        this.label = label;
+    public Label(String text, int size, int bgColor, int fgColor, float rotation, double minZoom, double maxZoom, GeoPoint location) {
+        this.text = text;
         this.size = size;
         this.bgColor = bgColor;
         this.fgColor = fgColor;
@@ -23,12 +23,12 @@ public class Label {
         this.location = location;
     }
 
-    public String getLabel() {
-        return label;
+    public String getText() {
+        return text;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public int getSize() {
@@ -90,7 +90,7 @@ public class Label {
     @Override
     public String toString() {
         return "Label{" +
-                "label='" + label + '\'' +
+                "text='" + text + '\'' +
                 ", size=" + size +
                 ", bgColor=" + bgColor +
                 ", fgColor=" + fgColor +

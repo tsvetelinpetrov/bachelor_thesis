@@ -87,7 +87,8 @@ public class MapFragment extends Fragment {
 
             @Override
             public boolean onZoom(ZoomEvent event) {
-                Log.e("19621795", String.valueOf(map.getZoomLevelDouble()));
+                map.getOverlays().clear();
+                map.drawAll(0);
                 return false;
             }
         });

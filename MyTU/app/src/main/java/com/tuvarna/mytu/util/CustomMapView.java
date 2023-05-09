@@ -3,6 +3,7 @@ package com.tuvarna.mytu.util;
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.Floor;
@@ -10,6 +11,7 @@ import com.tuvarna.mytu.models.Label;
 import com.tuvarna.mytu.models.Room;
 
 import org.osmdroid.tileprovider.MapTileProviderBase;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polygon;
@@ -88,9 +90,9 @@ public class CustomMapView extends MapView {
     public void drawRoom(Room room) {
         Polygon polyline = new Polygon(this);
         polyline.setPoints(room.getPoints());
-        polyline.setFillColor(room.getFillColor());
-        polyline.setStrokeColor(room.getStrokeColor());
-        polyline.setStrokeWidth(room.getStrokeWidth());
+        polyline.getFillPaint().setColor(room.getFillColor());
+        polyline.getOutlinePaint().setColor(room.getStrokeColor());
+        polyline.getOutlinePaint().setStrokeWidth(room.getStrokeWidth());
 
         this.getOverlays().add(polyline);
         this.invalidate();
@@ -118,13 +120,41 @@ public class CustomMapView extends MapView {
         mm.setTextLabelBackgroundColor(label.getBgColor());
         mm.setTextLabelFontSize(label.getSize());
         mm.setTextLabelForegroundColor(label.getFgColor());
-        mm.setTitle(label.getLabel());
+        mm.setTitle(label.getText());
         mm.setRotation(label.getRotation());
-        mm.setTextIcon(label.getLabel());
+        mm.setTextIcon(label.getText());
         mm.setPosition(label.getLocation());
 
         this.getOverlays().add(mm);
         this.invalidate();
+    }
+
+    static GeoPoint getCentroid(List<GeoPoint> points) {
+        if(points.isEmpty()) {
+            return new GeoPoint(0.0, 0.0);
+        } else if (points.size() == 1) {
+            return points.get(0);
+        }
+        double lowerX = points.get(0).getLatitude();
+        double lowerY = points.get(0).getLongitude();
+        double higherX = points.get(0).getLatitude();
+        double higherY = points.get(0).getLongitude();
+        for (int i = 1; i < points.size(); i++) {
+            if(points.get(i).getLatitude() > higherX) {
+                higherX = points.get(i).getLatitude();
+            }
+            if(points.get(i).getLatitude() < lowerX) {
+                lowerX = points.get(i).getLatitude();
+            }
+            if(points.get(i).getLongitude() > higherY) {
+                higherY = points.get(i).getLongitude();
+            }
+            if(points.get(i).getLongitude() < lowerY) {
+                lowerY = points.get(i).getLongitude();
+            }
+        }
+        //Log.i("19621795_", "getCentroid: " + ((higherX + lowerX) / 2) + " " + ((higherY + lowerY) / 2));
+        return new GeoPoint((higherX + lowerX) / 2, (higherY + lowerY) / 2);
     }
 
     public void drawAll(int level) {
