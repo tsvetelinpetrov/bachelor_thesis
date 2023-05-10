@@ -1,10 +1,15 @@
 package com.tuvarna.mytu.util;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import com.tuvarna.mytu.R;
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.Floor;
 import com.tuvarna.mytu.models.Label;
@@ -15,14 +20,18 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polygon;
+import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CustomMapView extends MapView {
 
     List<Building> buildings = new ArrayList<>();
     private int level = 0;
+    private double lastZoomLevelBuildingDrawn = 0;
 
     public CustomMapView(Context context, MapTileProviderBase tileProvider, Handler tileRequestCompleteHandler, AttributeSet attrs) {
         super(context, tileProvider, tileRequestCompleteHandler, attrs);
@@ -162,6 +171,54 @@ public class CustomMapView extends MapView {
             //map.getOverlays().clear();
             drawBuilding(b,level);
         }
+    }
+
+    public void drawAllBuildingLevels() {
+        List<Integer> levels = new ArrayList<>(
+                Arrays.asList(R.raw.full_zoom_out,
+                        R.raw.full_0)
+        );
+        for (Integer level : levels) {
+            drawBuildingsByImage(level);
+            this.getOverlays().get(1).setEnabled(false);
+        }
+
+
+    }
+
+    public void drawBuildingsByImage(int level) {
+        try {
+            InputStream inputStream = getResources().openRawResource(level);
+            GeoPoint overlayCenterPoint = new GeoPoint(43.224496, 27.935245);
+            CustomGroundOverlay groundOverlay = new CustomGroundOverlay();
+            groundOverlay.setPosition(overlayCenterPoint);
+
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            Drawable d = new BitmapDrawable(getResources(), bitmap);
+            groundOverlay.setImage(d.mutate());
+            groundOverlay.setDimensions(170f);
+            groundOverlay.setTransparency(0);
+            groundOverlay.setBearing(2.5f);
+            groundOverlay.setEnabled(false);
+            this.getOverlays().add(groundOverlay);
+            lastZoomLevelBuildingDrawn = this.getZoomLevelDouble();
+        } catch (Exception e) {
+            Log.e("19621795", e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void showBuildingFloor(int floor) {
+        for(int i = 1; i < this.getOverlays().size(); i++) {
+            this.getOverlays().get(i).setEnabled(false);
+        }
+        this.getOverlays().get(floor+2).setEnabled(true);
+    }
+
+    public void addRotationGesture() {
+        RotationGestureOverlay mRotationGestureOverlay = new RotationGestureOverlay(this);
+        mRotationGestureOverlay.setEnabled(true);
+        this.getOverlays().add(mRotationGestureOverlay);
     }
 
 }

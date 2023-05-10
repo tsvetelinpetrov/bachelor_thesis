@@ -1,13 +1,14 @@
 package com.tuvarna.mytu.views.fragments;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.tuvarna.mytu.R;
 import com.tuvarna.mytu.api.ApiRequest;
@@ -40,6 +41,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MapFragment extends Fragment {
 
     private CustomMapView map = null;
+    private double lastZoomLevel = 0;
+    private IMapController mapController;
+    Spinner spinner;
 
     public MapFragment() {
         // Required empty public constructor
@@ -48,16 +52,20 @@ public class MapFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i("19621795", "On create view");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         this.map = view.findViewById(R.id.map);
+        spinner = (Spinner) view.findViewById(R.id.floor_spinner);
+        mapController = this.map.getController();
         //map.setTileSource(TileSourceFactory.MAPNIK);
 
         // Create a custom tile source
@@ -79,29 +87,15 @@ public class MapFragment extends Fragment {
             }
         });*/
 
-        this.map.addMapListener(new MapListener() {
-            @Override
-            public boolean onScroll(ScrollEvent event) {
-                return false;
-            }
-
-            @Override
-            public boolean onZoom(ZoomEvent event) {
-                map.getOverlays().clear();
-                map.drawAll(0);
-                return false;
-            }
-        });
-
         this.map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
         this.map.setMultiTouchControls(true);
         this.map.setMinZoomLevel(18.5);
+        this.map.setMaxZoomLevel(22.910904337235227);
         this.map.setTilesScaledToDpi(false);
         this.map.setScrollableAreaLimitLatitude(43.225418, 43.222118, 0);
         this.map.setScrollableAreaLimitLongitude(27.932039, 27.940900, 0);
 
-        IMapController mapController = this.map.getController();
-        mapController.setZoom(5.5);
+        mapController.setZoom(19.4);
         GeoPoint startPoint = new GeoPoint(43.223401, 27.935145);
         mapController.setCenter(startPoint);
 
@@ -111,6 +105,39 @@ public class MapFragment extends Fragment {
         this.map.getOverlays().add(mRotationGestureOverlay);
 
         downloadData();
+        this.map.drawAllBuildingLevels();
+        this.map.showBuildingFloor(-1);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(), R.array.floor_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        this.map.addMapListener(new MapListener() {
+            @Override
+            public boolean onScroll(ScrollEvent event) {
+                return false;
+            }
+
+            @Override
+            public boolean onZoom(ZoomEvent event) {
+                //map.getOverlays().clear();
+                double zoomLevel = event.getZoomLevel();
+                Log.i("19621795", "Zoom level: " + zoomLevel);
+
+                if(zoomLevel > 20 && lastZoomLevel < 20) {
+                    Log.i("19621795", "Change 1");
+                    map.showBuildingFloor(0);
+                }
+
+                if(zoomLevel < 20 && lastZoomLevel > 20) {
+                    Log.i("19621795", "Change 2");
+                    map.showBuildingFloor(-1);
+                }
+
+                lastZoomLevel = zoomLevel;
+                return false;
+            }
+        });
 
         return view;
     }
@@ -123,6 +150,8 @@ public class MapFragment extends Fragment {
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         this.map.onResume(); //needed for compass, my location overlays, v6.0.0 and up
+        Log.i("19621795_", "Resume");
+        mapController.setZoom(19.4);
     }
 
     @Override
@@ -133,6 +162,7 @@ public class MapFragment extends Fragment {
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().save(this, prefs);
         this.map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
+        Log.i("19621795_", "Pause");
     }
 
     void downloadData() {
