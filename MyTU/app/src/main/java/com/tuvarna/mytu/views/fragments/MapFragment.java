@@ -14,6 +14,7 @@ import com.tuvarna.mytu.R;
 import com.tuvarna.mytu.api.ApiRequest;
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.util.CustomMapView;
+import com.tuvarna.mytu.util.FloorSelector;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapListener;
@@ -23,7 +24,6 @@ import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
-import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 
 import java.util.List;
 
@@ -99,18 +99,19 @@ public class MapFragment extends Fragment {
         GeoPoint startPoint = new GeoPoint(43.223401, 27.935145);
         mapController.setCenter(startPoint);
 
-        RotationGestureOverlay mRotationGestureOverlay = new RotationGestureOverlay(this.map);
-        mRotationGestureOverlay.setEnabled(true);
-        this.map.setMultiTouchControls(true);
-        this.map.getOverlays().add(mRotationGestureOverlay);
 
-        downloadData();
-        this.map.drawAllBuildingLevels();
-        this.map.showBuildingFloor(-1);
+        this.map.addRotationGesture();
+        this.map.drawBuildingsByImage(R.raw.full_zoom_out);
+        this.map.drawBuildingsByImage(R.raw.full_0);
+
+        //downloadData();
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(), R.array.floor_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        FloorSelector fs=new FloorSelector(map,spinner,0);
+        fs.selection();
 
         this.map.addMapListener(new MapListener() {
             @Override
@@ -126,18 +127,21 @@ public class MapFragment extends Fragment {
 
                 if(zoomLevel > 20 && lastZoomLevel < 20) {
                     Log.i("19621795", "Change 1");
-                    map.showBuildingFloor(0);
+                    //map.toggleZoomOutLayout(false);
+                    map.setLevel(map.getLevel());
                 }
 
                 if(zoomLevel < 20 && lastZoomLevel > 20) {
                     Log.i("19621795", "Change 2");
-                    map.showBuildingFloor(-1);
+                    map.toggleZoomOutOverlay();
                 }
 
                 lastZoomLevel = zoomLevel;
                 return false;
             }
         });
+
+        //map.toggleZoomOutLayout(true);
 
         return view;
     }

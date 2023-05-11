@@ -18,6 +18,7 @@ public class CustomGroundOverlay extends Overlay {
     protected float mTransparency;
     public final static float NO_DIMENSION = -1.0f;
     protected Point mPositionPixels, mSouthEastPixels;
+    protected int resouceId;
 
     public CustomGroundOverlay() {
         super();
@@ -27,6 +28,7 @@ public class CustomGroundOverlay extends Overlay {
         mTransparency = 0.0f;
         mPositionPixels = new Point();
         mSouthEastPixels = new Point();
+        resouceId = 0;
     }
 
     public void setImage(Drawable image){
@@ -83,6 +85,14 @@ public class CustomGroundOverlay extends Overlay {
         if (mHeight == NO_DIMENSION && mImage != null){
             mHeight = mWidth * mImage.getIntrinsicHeight() / mImage.getIntrinsicWidth();
         }
+    }
+
+    public int getResouceId() {
+        return resouceId;
+    }
+
+    public void setResouceId(int resouceId) {
+        this.resouceId = resouceId;
     }
 
     /** @return the bounding box, ignoring the bearing of the GroundOverlay (similar to Google Maps API) */

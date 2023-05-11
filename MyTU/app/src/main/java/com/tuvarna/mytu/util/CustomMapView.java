@@ -20,7 +20,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polygon;
-import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -67,6 +66,27 @@ public class CustomMapView extends MapView {
 
     public void setLevel(int level) {
         this.level = level;
+        switch (level) {
+            case 0:
+                drawBuildingsByImage(R.raw.full_0);
+                showBuildingFloor(R.raw.full_0);
+                break;
+            case 1:
+                drawBuildingsByImage(R.raw.full_1);
+                showBuildingFloor(R.raw.full_1);
+                break;
+            case 2:
+                drawBuildingsByImage(R.raw.full_2);
+                showBuildingFloor(R.raw.full_2);
+                break;
+            case 3:
+                drawBuildingsByImage(R.raw.full_3);
+                showBuildingFloor(R.raw.full_3);
+                break;
+        }
+
+        if(this.getZoomLevelDouble() < 20)
+            toggleZoomOutOverlay();
     }
 
     public int getLevel() {
@@ -182,13 +202,17 @@ public class CustomMapView extends MapView {
             drawBuildingsByImage(level);
             this.getOverlays().get(1).setEnabled(false);
         }
-
-
     }
 
-    public void drawBuildingsByImage(int level) {
+    public void drawBuildingsByImage(int resourceId) {
+        for(int i = 1; i < this.getOverlays().size(); i++) {
+            CustomGroundOverlay customGroundOverlay = (CustomGroundOverlay) this.getOverlays().get(i);
+            if(customGroundOverlay.getResouceId() == resourceId) {
+                return;
+            }
+        }
         try {
-            InputStream inputStream = getResources().openRawResource(level);
+            InputStream inputStream = getResources().openRawResource(resourceId);
             GeoPoint overlayCenterPoint = new GeoPoint(43.224496, 27.935245);
             CustomGroundOverlay groundOverlay = new CustomGroundOverlay();
             groundOverlay.setPosition(overlayCenterPoint);
@@ -200,6 +224,7 @@ public class CustomMapView extends MapView {
             groundOverlay.setTransparency(0);
             groundOverlay.setBearing(2.5f);
             groundOverlay.setEnabled(false);
+            groundOverlay.setResouceId(resourceId);
             this.getOverlays().add(groundOverlay);
             lastZoomLevelBuildingDrawn = this.getZoomLevelDouble();
         } catch (Exception e) {
@@ -209,14 +234,33 @@ public class CustomMapView extends MapView {
     }
 
     public void showBuildingFloor(int floor) {
-        for(int i = 1; i < this.getOverlays().size(); i++) {
-            this.getOverlays().get(i).setEnabled(false);
+        for(int i = 0; i < this.getOverlays().size(); i++) {
+            if(!(this.getOverlays().get(i) instanceof CustomGroundOverlay))
+                continue;
+            CustomGroundOverlay customGroundOverlay = (CustomGroundOverlay) this.getOverlays().get(i);
+            customGroundOverlay.setEnabled(false);
+            if(customGroundOverlay.getResouceId() == floor) {
+                customGroundOverlay.setEnabled(true);
+            }
         }
-        this.getOverlays().get(floor+2).setEnabled(true);
+        this.invalidate();
+    }
+
+    public void toggleZoomOutOverlay() {
+        for(int i = 0; i < this.getOverlays().size(); i++) {
+            if(!(this.getOverlays().get(i) instanceof CustomGroundOverlay))
+                continue;
+            CustomGroundOverlay customGroundOverlay = (CustomGroundOverlay) this.getOverlays().get(i);
+            customGroundOverlay.setEnabled(false);
+            if(customGroundOverlay.getResouceId() == R.raw.full_zoom_out) {
+                customGroundOverlay.setEnabled(true);
+            }
+        }
+        this.invalidate();
     }
 
     public void addRotationGesture() {
-        RotationGestureOverlay mRotationGestureOverlay = new RotationGestureOverlay(this);
+        CustomRotationGestureOverlay mRotationGestureOverlay = new CustomRotationGestureOverlay(this);
         mRotationGestureOverlay.setEnabled(true);
         this.getOverlays().add(mRotationGestureOverlay);
     }
