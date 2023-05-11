@@ -29,7 +29,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -71,7 +70,7 @@ public class MapFragment extends Fragment implements BuildingsCallback {
         final ITileSource tileSource = new XYTileSource( "HOT", 1, 19, 256, ".png",
                 new String[] {
                         Constants.TILE_SOURCE_URL
-                },"© Tsvetelin Petrov");
+                },"© " + R.string.ts_petrov);
         this.map.setTileSource(tileSource);
 
         this.map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
@@ -109,12 +108,10 @@ public class MapFragment extends Fragment implements BuildingsCallback {
                 //Log.i("19621795", "Zoom level: " + zoomLevel);
 
                 if(zoomLevel > 20 && lastZoomLevel < 20) {
-                    Log.i("19621795", "Change 1");
                     map.setLevel(map.getLevel());
                 }
 
                 if(zoomLevel < 20 && lastZoomLevel > 20) {
-                    Log.i("19621795", "Change 2");
                     map.toggleZoomOutOverlay();
                 }
 
@@ -143,8 +140,6 @@ public class MapFragment extends Fragment implements BuildingsCallback {
         map.getOverlays().add(OverlayEvents);
 
         map.drawBuildingsPolygons();
-
-        //map.toggleZoomOutLayout(true);
 
         buildingRepository.getAllBuildings(this);
 

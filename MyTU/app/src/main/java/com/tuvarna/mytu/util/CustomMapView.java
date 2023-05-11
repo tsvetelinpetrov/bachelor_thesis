@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 
 import com.tuvarna.mytu.R;
 import com.tuvarna.mytu.models.Building;
@@ -19,7 +18,6 @@ import com.tuvarna.mytu.models.Floor;
 import com.tuvarna.mytu.models.Label;
 import com.tuvarna.mytu.models.Room;
 
-import org.osmdroid.api.IMapView;
 import org.osmdroid.tileprovider.MapTileProviderBase;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
