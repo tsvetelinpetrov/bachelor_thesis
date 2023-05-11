@@ -11,12 +11,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.tuvarna.mytu.R;
-import com.tuvarna.mytu.api.ApiRequest;
 import com.tuvarna.mytu.models.Building;
+import com.tuvarna.mytu.repositories.BuildingRepository;
+import com.tuvarna.mytu.repositories.BuildingsCallback;
+import com.tuvarna.mytu.util.Constants;
 import com.tuvarna.mytu.util.CustomMapView;
 import com.tuvarna.mytu.util.FloorSelector;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
@@ -24,36 +27,30 @@ import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
+import org.osmdroid.views.overlay.MapEventsOverlay;
 
+import java.io.IOException;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MapFragment} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements BuildingsCallback {
+
+    BuildingRepository buildingRepository;
 
     private CustomMapView map = null;
     private double lastZoomLevel = 0;
     private IMapController mapController;
     Spinner spinner;
 
-    public MapFragment() {
-        // Required empty public constructor
-    }
+    public MapFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-
     }
 
     @Override
@@ -63,6 +60,8 @@ public class MapFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
+        buildingRepository = new BuildingRepository();
+
         this.map = view.findViewById(R.id.map);
         spinner = (Spinner) view.findViewById(R.id.floor_spinner);
         mapController = this.map.getController();
@@ -71,26 +70,14 @@ public class MapFragment extends Fragment {
         // Create a custom tile source
         final ITileSource tileSource = new XYTileSource( "HOT", 1, 19, 256, ".png",
                 new String[] {
-                        "http://creativecode.tu-varna.bg/mapsource/"
-                },"© OpenStreetMap contributors");
+                        Constants.TILE_SOURCE_URL
+                },"© Tsvetelin Petrov");
         this.map.setTileSource(tileSource);
-        /*this.map.setTileSource(new OnlineTileSourceBase("USGS Topo", 0, 20, 256, ".png",
-                new String[] { "http://creativecode.tu-varna.bg/mapsource/" }) {
-
-            @Override
-            public String getTileURLString(long pMapTileIndex) {
-                return getBaseUrl()
-                        + MapTileIndex.getZoom(pMapTileIndex)
-                        + "/" + MapTileIndex.getX(pMapTileIndex)
-                        + "/" + MapTileIndex.getY(pMapTileIndex)
-                        + mImageFilenameEnding;
-            }
-        });*/
 
         this.map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
         this.map.setMultiTouchControls(true);
         this.map.setMinZoomLevel(18.5);
-        this.map.setMaxZoomLevel(22.910904337235227);
+        //this.map.setMaxZoomLevel(22.910904337235227);
         this.map.setTilesScaledToDpi(false);
         this.map.setScrollableAreaLimitLatitude(43.225418, 43.222118, 0);
         this.map.setScrollableAreaLimitLongitude(27.932039, 27.940900, 0);
@@ -99,12 +86,9 @@ public class MapFragment extends Fragment {
         GeoPoint startPoint = new GeoPoint(43.223401, 27.935145);
         mapController.setCenter(startPoint);
 
-
         this.map.addRotationGesture();
         this.map.drawBuildingsByImage(R.raw.full_zoom_out);
         this.map.drawBuildingsByImage(R.raw.full_0);
-
-        //downloadData();
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(), R.array.floor_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -121,13 +105,11 @@ public class MapFragment extends Fragment {
 
             @Override
             public boolean onZoom(ZoomEvent event) {
-                //map.getOverlays().clear();
                 double zoomLevel = event.getZoomLevel();
-                Log.i("19621795", "Zoom level: " + zoomLevel);
+                //Log.i("19621795", "Zoom level: " + zoomLevel);
 
                 if(zoomLevel > 20 && lastZoomLevel < 20) {
                     Log.i("19621795", "Change 1");
-                    //map.toggleZoomOutLayout(false);
                     map.setLevel(map.getLevel());
                 }
 
@@ -141,7 +123,30 @@ public class MapFragment extends Fragment {
             }
         });
 
+        MapEventsReceiver mReceive = new MapEventsReceiver() {
+            @Override
+            public boolean singleTapConfirmedHelper(GeoPoint p) {
+                //Toast.makeText(getContext(),p.getLatitude() + " - "+p.getLongitude(),Toast.LENGTH_LONG).show();
+                Log.i("19621795_p", p.getLatitude() + ", "+p.getLongitude());
+
+                return false;
+            }
+
+            @Override
+            public boolean longPressHelper(GeoPoint p) {
+                return false;
+            }
+        };
+
+
+        MapEventsOverlay OverlayEvents = new MapEventsOverlay(getContext(), mReceive);
+        map.getOverlays().add(OverlayEvents);
+
+        map.drawBuildingsPolygons();
+
         //map.toggleZoomOutLayout(true);
+
+        buildingRepository.getAllBuildings(this);
 
         return view;
     }
@@ -169,45 +174,16 @@ public class MapFragment extends Fragment {
         Log.i("19621795_", "Pause");
     }
 
-    void downloadData() {
-        try {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.0.100:5184/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            ApiRequest request = retrofit.create(ApiRequest.class);
-            Call<List<Building>> call = request.getBuildings();
-
-            call.enqueue(new Callback() {
-                @Override
-                public void onResponse(Call call, Response response) {
-                    if (response.isSuccessful()) {
-                        List<Building> buildings = (List<Building>) response.body();
-
-                        map.setBuildings(buildings);
-                        map.drawAll(0);
-                        longInfo(String.valueOf(response.code()));
-                    } else {
-                        longInfo(String.valueOf(response.code()));
-                    }
-                }
-
-                @Override
-                public void onFailure(Call call, Throwable t) {
-                    //longInfo(t.getMessage());
-                }
-            });
-        } catch (Exception e) {
-
+    @Override
+    public void onBuildingsReceived(List<Building> buildings) {
+        Log.i("19621795_", "Buildings received");
+        for (Building building : buildings) {
+            Log.i("19621795_", building.toString());
         }
-
     }
 
-    public static void longInfo(String str) {
-        if (str.length() > 4000) {
-            Log.i("19621795_", str.substring(0, 4000));
-            longInfo(str.substring(4000));
-        } else
-            Log.i("19621795_", str);
+    @Override
+    public void onBuildingsReceiveFailure(Throwable t) {
+        Log.i("19621795_", "Buildings NOT received." + t.getMessage());
     }
 }

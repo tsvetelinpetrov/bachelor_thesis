@@ -7,7 +7,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
-public interface ApiRequest {
+public interface ApiService {
     @GET("api/Building")
     Call<List<Building>> getBuildings();
 }

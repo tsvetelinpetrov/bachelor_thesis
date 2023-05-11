@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+
 public class FloorSelector {
     private CustomMapView map = null;
     private Spinner spinner;
