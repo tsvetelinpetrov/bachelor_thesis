@@ -8,6 +8,7 @@
     <string name="bottom_menu_4">Още</string>
 
     <string name="ts_petrov">Tsvetelin Petrov</string>
+    <string name="hello_blank_fragment">Test</string>
 
     <string-array name="floor_array">
         <item>-1</item>

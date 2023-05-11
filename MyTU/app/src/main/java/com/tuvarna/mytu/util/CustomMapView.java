@@ -37,11 +37,14 @@ public class CustomMapView extends MapView {
     private List<MapStructurePolygon> buildingPolygons = new ArrayList<>();
     private MapStructurePolygon mSelectedPolygon;
 
-    public CustomMapView(Context context, MapTileProviderBase tileProvider, Handler tileRequestCompleteHandler, AttributeSet attrs) {
+    public CustomMapView(Context context, MapTileProviderBase tileProvider,
+                         Handler tileRequestCompleteHandler, AttributeSet attrs) {
         super(context, tileProvider, tileRequestCompleteHandler, attrs);
     }
 
-    public CustomMapView(Context context, MapTileProviderBase tileProvider, Handler tileRequestCompleteHandler, AttributeSet attrs, boolean hardwareAccelerated) {
+    public CustomMapView(Context context, MapTileProviderBase tileProvider,
+                         Handler tileRequestCompleteHandler, AttributeSet attrs,
+                         boolean hardwareAccelerated) {
         super(context, tileProvider, tileRequestCompleteHandler, attrs, hardwareAccelerated);
     }
 
@@ -57,7 +60,8 @@ public class CustomMapView extends MapView {
         super(context, aTileProvider);
     }
 
-    public CustomMapView(Context context, MapTileProviderBase aTileProvider, Handler tileRequestCompleteHandler) {
+    public CustomMapView(Context context, MapTileProviderBase aTileProvider,
+                         Handler tileRequestCompleteHandler) {
         super(context, aTileProvider, tileRequestCompleteHandler);
     }
 
@@ -147,7 +151,8 @@ public class CustomMapView extends MapView {
     }
 
     public void drawLabel(Label label) {
-        if ((int) this.getZoomLevelDouble() < label.getMinZoom() || (int) this.getZoomLevelDouble() > label.getMaxZoom()) {
+        if ((int) this.getZoomLevelDouble() < label.getMinZoom()
+                || (int) this.getZoomLevelDouble() > label.getMaxZoom()) {
             return;
         }
         Marker mm = new Marker(this);
@@ -342,7 +347,8 @@ public class CustomMapView extends MapView {
                         // Highlight the corners of the selected polygon
                         mSelectedPolygon = polygon1;
                         mSelectedPolygon.getOutlinePaint().setStrokeWidth(10);
-                        mSelectedPolygon.getOutlinePaint().setColor(Color.parseColor("#ff9c00"));
+                        mSelectedPolygon.getOutlinePaint().setColor(Color.parseColor(
+                                Constants.MAP_POLYGON_SELECT_STROKE_COLOR));
                         view.invalidate();
                         return false;
                     }

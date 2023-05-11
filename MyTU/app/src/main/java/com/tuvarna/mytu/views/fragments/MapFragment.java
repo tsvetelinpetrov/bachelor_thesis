@@ -24,6 +24,7 @@ import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
@@ -64,32 +65,37 @@ public class MapFragment extends Fragment implements BuildingsCallback {
         this.map = view.findViewById(R.id.map);
         spinner = (Spinner) view.findViewById(R.id.floor_spinner);
         mapController = this.map.getController();
-        //map.setTileSource(TileSourceFactory.MAPNIK);
 
-        // Create a custom tile source
-        final ITileSource tileSource = new XYTileSource( "HOT", 1, 19, 256, ".png",
-                new String[] {
-                        Constants.TILE_SOURCE_URL
-                },"© " + R.string.ts_petrov);
-        this.map.setTileSource(tileSource);
+        if(Constants.TILE_MAP_SOURCE == "mapnik") {
+            map.setTileSource(TileSourceFactory.MAPNIK);
+        } else if(Constants.TILE_MAP_SOURCE == "custom") {
+            // Create a custom tile source
+            final ITileSource tileSource = new XYTileSource( "HOT",
+                    1, 19,256, ".png",
+                    new String[] {
+                            Constants.TILE_SOURCE_URL
+                    },"© " + R.string.ts_petrov);
+            this.map.setTileSource(tileSource);
+        }
 
         this.map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
         this.map.setMultiTouchControls(true);
-        this.map.setMinZoomLevel(18.5);
-        //this.map.setMaxZoomLevel(22.910904337235227);
+        this.map.setMinZoomLevel(Constants.MAP_MIN_ZOOM_LEVEL);
+        this.map.setMaxZoomLevel(Constants.MAP_MAX_ZOOM_LEVEL);
         this.map.setTilesScaledToDpi(false);
         this.map.setScrollableAreaLimitLatitude(43.225418, 43.222118, 0);
         this.map.setScrollableAreaLimitLongitude(27.932039, 27.940900, 0);
 
-        mapController.setZoom(19.4);
-        GeoPoint startPoint = new GeoPoint(43.223401, 27.935145);
+        mapController.setZoom(Constants.MAP_STARTING_ZOOM_LEVEL);
+        GeoPoint startPoint = new GeoPoint(Constants.MAP_STARTING_POINT);
         mapController.setCenter(startPoint);
 
         this.map.addRotationGesture();
         this.map.drawBuildingsByImage(R.raw.full_zoom_out);
         this.map.drawBuildingsByImage(R.raw.full_0);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(), R.array.floor_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(),
+                R.array.floor_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
@@ -123,7 +129,6 @@ public class MapFragment extends Fragment implements BuildingsCallback {
         MapEventsReceiver mReceive = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
-                //Toast.makeText(getContext(),p.getLatitude() + " - "+p.getLongitude(),Toast.LENGTH_LONG).show();
                 Log.i("19621795_p", p.getLatitude() + ", "+p.getLongitude());
 
                 return false;
