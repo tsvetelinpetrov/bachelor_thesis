@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.tuvarna.mytu.R;
@@ -49,8 +48,6 @@ public class MapFragment extends Fragment implements BuildingsCallback {
     private IMapController mapController;
     Spinner spinner;
     ConstraintLayout progressBarHolder;
-    private ProgressBar progressBar;
-
     List<Building> buildings;
 
     public MapFragment() { }
@@ -146,7 +143,6 @@ public class MapFragment extends Fragment implements BuildingsCallback {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
                 Log.i("19621795_p", p.getLatitude() + ", "+p.getLongitude());
-
                 return false;
             }
 
@@ -205,7 +201,7 @@ public class MapFragment extends Fragment implements BuildingsCallback {
     @Override
     public void onBuildingsReceiveFailure(Throwable t) {
         buildingRepository.getAllBuildings(MapFragment.this);
-        //Log.i("19621795_", "Buildings NOT received." + t.getMessage());
+        Log.i("19621795_", "Buildings NOT received." + t.getMessage());
     }
 
     public static void longInfo(String str) {

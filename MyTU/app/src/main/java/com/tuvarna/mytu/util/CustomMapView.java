@@ -20,14 +20,12 @@ import android.widget.TextView;
 import com.tuvarna.mytu.R;
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.Floor;
-import com.tuvarna.mytu.models.Label;
 import com.tuvarna.mytu.models.Room;
 
 import org.osmdroid.tileprovider.MapTileProviderBase;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.Polygon;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -109,69 +107,6 @@ public class CustomMapView extends MapView {
         return this.level;
     }
 
-    public void drawBuilding(Building building, int level) {
-        Polygon polyline = new Polygon(this);
-        polyline.setPoints(building.getPoints());
-        //polyline.getFillPaint().setColor(building.getFillColor());
-        //polyline.getOutlinePaint().setColor(building.getStrokeColor());
-        polyline.getOutlinePaint().setStrokeWidth(4);
-        this.getOverlays().add(polyline);
-        this.invalidate();
-
-        if ((int) this.getZoomLevelDouble() > 19) {
-            /*for(Floor f:building.getFloors()){
-                if(this.level==f.getLevel()) {
-                    drawFloor(f);
-                    break;
-                }
-            }*/
-        }
-        if (building.getLabel() != null) {
-            building.getLabel().setLocation(polyline.getInfoWindowLocation());
-            drawLabel(building.getLabel());
-        }
-    }
-
-    public void drawRoom(Room room) {
-        Polygon polyline = new Polygon(this);
-        polyline.setPoints(room.getPoints());
-        //polyline.getFillPaint().setColor(room.getFillColor());
-        //polyline.getOutlinePaint().setColor(room.getStrokeColor());
-        //polyline.getOutlinePaint().setStrokeWidth(room.getStrokeWidth());
-
-        this.getOverlays().add(polyline);
-        this.invalidate();
-
-        room.getLabel().setLocation(polyline.getInfoWindowLocation());
-        drawLabel(room.getLabel());
-    }
-
-    public void drawFloor(Floor floor) {
-        Polygon polyline=new Polygon(this);
-
-        this.getOverlays().add(polyline);
-        this.invalidate();
-
-        for(Room r: floor.getRooms()){
-            drawRoom(r);
-        }
-    }
-
-    public void drawLabel(Label label) {
-
-        Marker mm = new Marker(this);
-        //mm.setTextLabelBackgroundColor(label.getBgColor());
-        //mm.setTextLabelFontSize(label.getSize());
-        //mm.setTextLabelForegroundColor(label.getFgColor());
-        mm.setTitle(label.getText());
-        //mm.setRotation(label.getRotation());
-        mm.setTextIcon(label.getText());
-        mm.setPosition(label.getLocation());
-
-        this.getOverlays().add(mm);
-        this.invalidate();
-    }
-
     static GeoPoint getCentroid(List<GeoPoint> points) {
         if(points.isEmpty()) {
             return new GeoPoint(0.0, 0.0);
@@ -196,7 +131,6 @@ public class CustomMapView extends MapView {
                 lowerY = points.get(i).getLongitude();
             }
         }
-        //Log.i("19621795_", "getCentroid: " + ((higherX + lowerX) / 2) + " " + ((higherY + lowerY) / 2));
         return new GeoPoint((higherX + lowerX) / 2, (higherY + lowerY) / 2);
     }
 
@@ -320,7 +254,8 @@ public class CustomMapView extends MapView {
 
     private Bitmap createBitmapFromView(View view) {
         view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
         view.draw(canvas);
@@ -355,7 +290,8 @@ public class CustomMapView extends MapView {
                     if(room.getLabel().getLatitude() == 0 && room.getLabel().getLongitude() == 0) {
                         marker.setPosition(getCentroid(room.getPoints()));
                     } else {
-                        marker.setPosition(new GeoPoint(room.getLabel().getLatitude(), room.getLabel().getLongitude()));
+                        marker.setPosition(new GeoPoint(room.getLabel().getLatitude(),
+                                room.getLabel().getLongitude()));
                     }
                     marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                     marker.setInfoWindow(null);
@@ -382,7 +318,6 @@ public class CustomMapView extends MapView {
                 }
             }
         }
-
     }
 
     public void drawRoomPolygons(int floor) {
