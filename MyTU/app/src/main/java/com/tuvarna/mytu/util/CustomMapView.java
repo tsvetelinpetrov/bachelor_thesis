@@ -112,12 +112,12 @@ public class CustomMapView extends MapView {
         this.invalidate();
 
         if ((int) this.getZoomLevelDouble() > 19) {
-            for(Floor f:building.getFloors()){
+            /*for(Floor f:building.getFloors()){
                 if(this.level==f.getLevel()) {
                     drawFloor(f);
                     break;
                 }
-            }
+            }*/
         }
         if (building.getLabel() != null) {
             building.getLabel().setLocation(polyline.getInfoWindowLocation());
@@ -151,16 +151,13 @@ public class CustomMapView extends MapView {
     }
 
     public void drawLabel(Label label) {
-        if ((int) this.getZoomLevelDouble() < label.getMinZoom()
-                || (int) this.getZoomLevelDouble() > label.getMaxZoom()) {
-            return;
-        }
+
         Marker mm = new Marker(this);
-        mm.setTextLabelBackgroundColor(label.getBgColor());
-        mm.setTextLabelFontSize(label.getSize());
-        mm.setTextLabelForegroundColor(label.getFgColor());
+        //mm.setTextLabelBackgroundColor(label.getBgColor());
+        //mm.setTextLabelFontSize(label.getSize());
+        //mm.setTextLabelForegroundColor(label.getFgColor());
         mm.setTitle(label.getText());
-        mm.setRotation(label.getRotation());
+        //mm.setRotation(label.getRotation());
         mm.setTextIcon(label.getText());
         mm.setPosition(label.getLocation());
 

@@ -1,6 +1,8 @@
 package com.tuvarna.mytu.views.fragments;
 
 import android.os.Bundle;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -8,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.tuvarna.mytu.R;
@@ -45,6 +48,10 @@ public class MapFragment extends Fragment implements BuildingsCallback {
     private double lastZoomLevel = 0;
     private IMapController mapController;
     Spinner spinner;
+    ConstraintLayout progressBarHolder;
+    private ProgressBar progressBar;
+
+    List<Building> buildings;
 
     public MapFragment() { }
 
@@ -59,6 +66,9 @@ public class MapFragment extends Fragment implements BuildingsCallback {
         Log.i("19621795", "On create view");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_map, container, false);
+
+        progressBarHolder = view.findViewById(R.id.progress_bar_holder);
+        progressBarHolder.setVisibility(View.VISIBLE);
 
         buildingRepository = new BuildingRepository();
 
@@ -144,7 +154,7 @@ public class MapFragment extends Fragment implements BuildingsCallback {
         MapEventsOverlay OverlayEvents = new MapEventsOverlay(getContext(), mReceive);
         map.getOverlays().add(OverlayEvents);
 
-        map.drawBuildingsPolygons();
+        //map.drawBuildingsPolygons();
 
         buildingRepository.getAllBuildings(this);
 
@@ -177,13 +187,24 @@ public class MapFragment extends Fragment implements BuildingsCallback {
     @Override
     public void onBuildingsReceived(List<Building> buildings) {
         Log.i("19621795_", "Buildings received");
-        for (Building building : buildings) {
-            Log.i("19621795_", building.toString());
+        this.buildings = buildings;
+        progressBarHolder.setVisibility(View.INVISIBLE);
+        for (Building building : this.buildings) {
+            longInfo(building.toString());
         }
     }
 
     @Override
     public void onBuildingsReceiveFailure(Throwable t) {
-        Log.i("19621795_", "Buildings NOT received." + t.getMessage());
+        buildingRepository.getAllBuildings(MapFragment.this);
+        //Log.i("19621795_", "Buildings NOT received." + t.getMessage());
+    }
+
+    public static void longInfo(String str) {
+        if (str.length() > 4000) {
+            Log.i("19621795_", str.substring(0, 4000));
+            longInfo(str.substring(4000));
+        } else
+            Log.i("19621795_", str);
     }
 }
