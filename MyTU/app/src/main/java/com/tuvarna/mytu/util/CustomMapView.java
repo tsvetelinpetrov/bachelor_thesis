@@ -4,13 +4,25 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.TouchDelegate;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.tuvarna.mytu.R;
 import com.tuvarna.mytu.models.Building;
@@ -22,20 +34,25 @@ import org.osmdroid.tileprovider.MapTileProviderBase;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polygon;
+import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
+import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class CustomMapView extends MapView {
 
     List<Building> buildings = new ArrayList<>();
     private int level = 0;
     private double lastZoomLevelBuildingDrawn = 0;
-    private List<MapStructurePolygon> buildingPolygons = new ArrayList<>();
-    private MapStructurePolygon mSelectedPolygon;
+    private List<BuildingPolygon> buildingPolygons = new ArrayList<>();
+    private List<RoomPolygon> roomPolygons = new ArrayList<>();
+    private BuildingPolygon selectedBuildingPolygon = null;
+    private RoomPolygon selectedRoomPolygon = null;
 
     public CustomMapView(Context context, MapTileProviderBase tileProvider,
                          Handler tileRequestCompleteHandler, AttributeSet attrs) {
@@ -94,8 +111,9 @@ public class CustomMapView extends MapView {
                 break;
         }
 
-        if(this.getZoomLevelDouble() < 20)
+        if(this.getZoomLevelDouble() < 20){
             toggleZoomOutOverlay();
+        }
     }
 
     public int getLevel() {
@@ -256,111 +274,169 @@ public class CustomMapView extends MapView {
         this.getOverlays().add(mRotationGestureOverlay);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    public void drawBuildingsPolygons() {
-        MapStructurePolygon polygon = new MapStructurePolygon();
-        polygon.setPoints(Arrays.asList(
-                new GeoPoint(43.22428955948367, 27.934192697046626),
-                new GeoPoint(43.224421549993075, 27.934200650041333),
-                new GeoPoint(43.22440351797615, 27.934743532967985),
-                new GeoPoint(43.22454915111607, 27.93475202501088),
-                new GeoPoint(43.22455069824412, 27.934706248331366),
-                new GeoPoint(43.224773355596156, 27.93471924011027),
-                new GeoPoint(43.22473872956639, 27.93579481358563),
-                new GeoPoint(43.22451630907547, 27.935781762303833),
-                new GeoPoint(43.22453625926984, 27.93519372938917),
-                new GeoPoint(43.22438903347902, 27.93518451609097),
-                new GeoPoint(43.22438619590949, 27.93526636505956),
-                new GeoPoint(43.22425547896848, 27.935258681656222)));
-        polygon.getOutlinePaint().setStrokeWidth(0);
-        polygon.setObjId(1);
-        polygon.setType(1);
-        buildingPolygons.add(polygon);
-        this.getOverlayManager().add(polygon);
-        polygon = new MapStructurePolygon();
-        polygon.setPoints(Arrays.asList(
-                new GeoPoint(43.22436904555783, 27.935269168063428),
-                new GeoPoint(43.22427385148676, 27.935265156082778),
-                new GeoPoint(43.22426817087379, 27.9354333867189),
-                new GeoPoint(43.22425979731834, 27.93543297261357),
-                new GeoPoint(43.22425786424133, 27.935488706702614),
-                new GeoPoint(43.224249859707854, 27.935488467298114),
-                new GeoPoint(43.224248041441804, 27.935537193559355),
-                new GeoPoint(43.2242489228269, 27.93554736642281),
-                new GeoPoint(43.22425085951879, 27.935557119646404),
-                new GeoPoint(43.22425208724309, 27.935562909881355),
-                new GeoPoint(43.22425623729685, 27.93557382589796),
-                new GeoPoint(43.224258744620876, 27.935578880488293),
-                new GeoPoint(43.22426339613895, 27.93558597589913),
-                new GeoPoint(43.224271367698826, 27.93559449513819),
-                new GeoPoint(43.22428099927847, 27.935601234591957),
-                new GeoPoint(43.22428677476715, 27.935604319553164),
-                new GeoPoint(43.22429412381632, 27.935605790842374),
-                new GeoPoint(43.22432834902533, 27.935607766040533),
-                new GeoPoint(43.224326867288326, 27.93565670339305),
-                new GeoPoint(43.224320375906906, 27.93565618228675),
-                new GeoPoint(43.22431751312308, 27.93573839522972),
-                new GeoPoint(43.22431261381691, 27.93573785141288),
-                new GeoPoint(43.22429472479223, 27.936269936230644),
-                new GeoPoint(43.22438451620539, 27.936275092346705),
-                new GeoPoint(43.224384423487, 27.936279456748792),
-                new GeoPoint(43.22444196142635, 27.9362829597452),
-                new GeoPoint(43.224447170096866, 27.936281589861352),
-                new GeoPoint(43.224493005710876, 27.93628431872372),
-                new GeoPoint(43.22449425395217, 27.936245552661433),
-                new GeoPoint(43.22444380598073, 27.93624240771794),
-                new GeoPoint(43.22445902324501, 27.935782159829984),
-                new GeoPoint(43.22449332509108, 27.935784538394927),
-                new GeoPoint(43.224494609249795, 27.93574575490959),
-                new GeoPoint(43.224405882003815, 27.935739502131128),
-                new GeoPoint(43.22440774937733, 27.935676868395404),
-                new GeoPoint(43.22440058601515, 27.93567593110589),
-                new GeoPoint(43.22440213025017, 27.935619441759712),
-                new GeoPoint(43.224394863745324, 27.935618371782425),
-                new GeoPoint(43.22439712903653, 27.935560888590174),
-                new GeoPoint(43.22438981427516, 27.935560888590174),
-                new GeoPoint(43.22439134616243, 27.935503391087053),
-                new GeoPoint(43.224384222886286, 27.935503391087053),
-                new GeoPoint(43.224385754773685, 27.935445420569692),
-                new GeoPoint(43.22437859319971, 27.9354452628983),
-                new GeoPoint(43.22438016338446, 27.935388238409388),
-                new GeoPoint(43.22437323159298, 27.935387292380966),
-                new GeoPoint(43.224374150725595, 27.935330583234816),
-                new GeoPoint(43.22436721893344, 27.935329321863662),
-                new GeoPoint(43.22436904679967, 27.935269135573947)
-                ));
-        polygon.getOutlinePaint().setStrokeWidth(0);
-        polygon.setObjId(2);
-        polygon.setType(1);
-        buildingPolygons.add(polygon);
-        this.getOverlayManager().add(polygon);
+    public void generateBuildingPolygons(List<Building> buildings) {
+        for(Building building : buildings) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            View markerLayout = inflater.inflate(R.layout.custom_marker_layout, null);
+            ImageView markerIcon = markerLayout.findViewById(R.id.marker_icon);
+            TextView markerText = markerLayout.findViewById(R.id.marker_text);
+            markerIcon.setImageResource(R.drawable.ic_calendar);
+            markerIcon.setVisibility(View.GONE);
+            markerText.setText(Html.fromHtml(building.getLabel().getMapText()));
 
+            Bitmap bitmap = createBitmapFromView(markerLayout);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), bitmap);
 
-        this.setOnTouchListener((view, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                // Check if the touch event is inside any of the polygons
-                for (MapStructurePolygon polygon1 : buildingPolygons) {
-                    if (polygon1.contains(event)) {
-                        // Highlight the corners of the selected polygon
-                        mSelectedPolygon = polygon1;
-                        mSelectedPolygon.getOutlinePaint().setStrokeWidth(10);
-                        mSelectedPolygon.getOutlinePaint().setColor(Color.parseColor(
-                                Constants.MAP_POLYGON_SELECT_STROKE_COLOR));
-                        view.invalidate();
-                        return false;
-                    }
+            Marker marker = new Marker(this);
+            marker.setTextLabelBackgroundColor(Color.TRANSPARENT);
+            marker.setTextLabelForegroundColor(Color.BLUE);
+            marker.setIcon(bitmapDrawable);
+            marker.setPosition(getCentroid(building.getPoints()));
+            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            marker.setInfoWindow(null);
+            marker.setOnMarkerClickListener((marker1, mapView) -> false);
+
+            BuildingPolygon polygon = new BuildingPolygon(building, marker);
+            polygon.setInfoWindow(marker.getInfoWindow());
+            polygon.setPoints(building.getPoints());
+            polygon.getOutlinePaint().setStrokeWidth(0);
+            polygon.getOutlinePaint().setColor(Color.TRANSPARENT);
+            polygon.setOnClickListener((polygon1, mapView, eventPos) -> {
+                BuildingPolygon polygon3 = (BuildingPolygon) polygon1;
+                if(selectedBuildingPolygon != null) {
+                    selectedBuildingPolygon.getOutlinePaint().setStrokeWidth(0);
+                    selectedBuildingPolygon.getOutlinePaint().setColor(Color.TRANSPARENT);
                 }
+                selectedBuildingPolygon = (BuildingPolygon) polygon1;
+                selectedBuildingPolygon.getOutlinePaint().setStrokeWidth(10);
+                selectedBuildingPolygon.getOutlinePaint().setColor(Color.parseColor(
+                        Constants.MAP_POLYGON_SELECT_STROKE_COLOR));
+                selectedBuildingPolygon.getLabelMarker().setTextLabelForegroundColor(Color.parseColor(
+                        Constants.MAP_POLYGON_SELECT_STROKE_COLOR));
+                mapView.invalidate();
+                return false;
+            });
+            buildingPolygons.add(polygon);
+        }
+    }
 
-                // If the touch event is not inside any polygon, un-highlight the previous selected polygon
-                /*if (mSelectedPolygon != null) {
-                    mSelectedPolygon.setStrokeWidth(0);
-                    mSelectedPolygon.setStrokeColor(Color.TRANSPARENT);
-                    map.invalidate();
-                    mSelectedPolygon = null;
-                }*/
+    @SuppressLint({"ClickableViewAccessibility", "UseCompatLoadingForDrawables"})
+    public void drawBuildingsPolygons() {
+        for(BuildingPolygon buildingPolygon : buildingPolygons) {
+            this.getOverlayManager().add(buildingPolygon);
+            this.getOverlayManager().add(buildingPolygon.getLabelMarker());
+            this.invalidate();
+        }
+    }
+
+    private Bitmap createBitmapFromView(View view) {
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.draw(canvas);
+        return bitmap;
+    }
+
+    public void generateRoomPolygons(List<Building> buildings) {
+        for(Building building : buildings) {
+            for (Floor fl : building.getFloors()) {
+                for (Room room : fl.getRooms()) {
+                    LayoutInflater inflater = LayoutInflater.from(getContext());
+                    View markerLayout = inflater.inflate(R.layout.custom_marker_layout, null);
+                    ImageView markerIcon = markerLayout.findViewById(R.id.marker_icon);
+                    TextView markerText = markerLayout.findViewById(R.id.marker_text);
+                    markerIcon.setVisibility(View.GONE);
+                    if(room.getLabel().getIcon() != 0) {
+                        markerIcon.setImageResource(IconSelector.getIconId(room.getLabel().getIcon()));
+                        markerIcon.setVisibility(View.VISIBLE);
+                    }
+                    if(room.getLabel().getIconColor().matches("^#[0-9a-fA-F]+$")) {
+                        markerIcon.setColorFilter(Color.parseColor(room.getLabel().getIconColor()));
+                    }
+                    markerText.setText(Html.fromHtml(room.getLabel().getMapText()));
+
+                    Bitmap bitmap = createBitmapFromView(markerLayout);
+                    BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), bitmap);
+
+                    Marker marker = new Marker(this);
+                    marker.setTextLabelBackgroundColor(Color.TRANSPARENT);
+                    marker.setTextLabelForegroundColor(Color.BLUE);
+                    marker.setIcon(bitmapDrawable);
+                    if(room.getLabel().getLatitude() == 0 && room.getLabel().getLongitude() == 0) {
+                        marker.setPosition(getCentroid(room.getPoints()));
+                    } else {
+                        marker.setPosition(new GeoPoint(room.getLabel().getLatitude(), room.getLabel().getLongitude()));
+                    }
+                    marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                    marker.setInfoWindow(null);
+                    marker.setOnMarkerClickListener((marker1, mapView) -> false);
+
+                    RoomPolygon polygon = new RoomPolygon(room, fl.getLevel(), marker);
+                    polygon.setInfoWindow(marker.getInfoWindow());
+                    polygon.setPoints(room.getPoints());
+                    polygon.getOutlinePaint().setStrokeWidth(0);
+                    polygon.getOutlinePaint().setColor(Color.TRANSPARENT);
+                    polygon.setOnClickListener((polygon1, mapView, eventPos) -> {
+                        if(selectedRoomPolygon != null) {
+                            selectedRoomPolygon.getOutlinePaint().setStrokeWidth(0);
+                            selectedRoomPolygon.getOutlinePaint().setColor(Color.TRANSPARENT);
+                        }
+                        polygon1.getOutlinePaint().setStrokeWidth(10);
+                        polygon1.getOutlinePaint().setColor(Color.parseColor(
+                                Constants.MAP_POLYGON_SELECT_STROKE_COLOR));
+                        selectedRoomPolygon = (RoomPolygon) polygon1;
+                        mapView.invalidate();
+                        return false;
+                    });
+                    roomPolygons.add(polygon);
+                }
             }
-            return false;
-        });
+        }
+
+    }
+
+    public void drawRoomPolygons(int floor) {
+        for(RoomPolygon roomPolygon : roomPolygons) {
+            if(roomPolygon.getFloor() == floor) {
+                this.getOverlayManager().add(roomPolygon);
+                this.getOverlayManager().add(roomPolygon.getLabelMarker());
+                this.invalidate();
+            }
+        }
+    }
+
+    public void deselectBuildingPolygon() {
+        if(selectedBuildingPolygon != null) {
+            selectedBuildingPolygon.getOutlinePaint().setStrokeWidth(0);
+            selectedBuildingPolygon.getOutlinePaint().setColor(Color.TRANSPARENT);
+            selectedBuildingPolygon = null;
+        }
+    }
+
+    public void deselectRoomPolygon() {
+        if(selectedRoomPolygon != null) {
+            selectedRoomPolygon.getOutlinePaint().setStrokeWidth(0);
+            selectedRoomPolygon.getOutlinePaint().setColor(Color.TRANSPARENT);
+            selectedRoomPolygon = null;
+            this.invalidate();
+        }
+    }
+
+    public void removeBuildingPolygons() {
+        for(BuildingPolygon buildingPolygon : buildingPolygons) {
+            this.getOverlayManager().remove(buildingPolygon.getLabelMarker());
+            this.getOverlayManager().remove(buildingPolygon);
+        }
+        this.invalidate();
+    }
+
+    public void removeRoomPolygons() {
+        for(RoomPolygon roomPolygon : roomPolygons) {
+            this.getOverlayManager().remove(roomPolygon);
+            this.getOverlayManager().remove(roomPolygon.getLabelMarker());
+        }
+        this.invalidate();
     }
 
 }

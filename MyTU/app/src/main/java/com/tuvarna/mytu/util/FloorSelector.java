@@ -69,6 +69,11 @@ public class FloorSelector {
                         break;
                 }
                 map.setLevel(floor);
+                if(map.getZoomLevelDouble() > 20) {
+                    map.deselectRoomPolygon();
+                    map.removeRoomPolygons();
+                    map.drawRoomPolygons(map.getLevel());
+                }
                 //activity.drawAll(level);
             }
 

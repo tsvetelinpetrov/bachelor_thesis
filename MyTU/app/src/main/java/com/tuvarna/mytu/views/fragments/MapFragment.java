@@ -125,10 +125,16 @@ public class MapFragment extends Fragment implements BuildingsCallback {
 
                 if(zoomLevel > 20 && lastZoomLevel < 20) {
                     map.setLevel(map.getLevel());
+                    map.removeBuildingPolygons();
+                    map.deselectRoomPolygon();
+                    map.drawRoomPolygons(map.getLevel());
                 }
 
                 if(zoomLevel < 20 && lastZoomLevel > 20) {
                     map.toggleZoomOutOverlay();
+                    map.removeRoomPolygons();
+                    map.deselectBuildingPolygon();
+                    map.drawBuildingsPolygons();
                 }
 
                 lastZoomLevel = zoomLevel;
@@ -153,8 +159,6 @@ public class MapFragment extends Fragment implements BuildingsCallback {
 
         MapEventsOverlay OverlayEvents = new MapEventsOverlay(getContext(), mReceive);
         map.getOverlays().add(OverlayEvents);
-
-        //map.drawBuildingsPolygons();
 
         buildingRepository.getAllBuildings(this);
 
@@ -188,10 +192,14 @@ public class MapFragment extends Fragment implements BuildingsCallback {
     public void onBuildingsReceived(List<Building> buildings) {
         Log.i("19621795_", "Buildings received");
         this.buildings = buildings;
+        map.setBuildings(buildings);
+        map.generateBuildingPolygons(buildings);
+        map.generateRoomPolygons(buildings);
+
+        map.drawBuildingsPolygons();
+        map.drawRoomPolygons(0);
+        map.removeRoomPolygons();
         progressBarHolder.setVisibility(View.INVISIBLE);
-        for (Building building : this.buildings) {
-            longInfo(building.toString());
-        }
     }
 
     @Override
