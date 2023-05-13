@@ -5,12 +5,22 @@ import org.osmdroid.util.GeoPoint;
 import java.util.List;
 
 public class Room {
+    private int id;
     Label label;
     List<GeoPoint> points;
 
-    public Room(Label label, List<GeoPoint> points) {
+    public Room(int id, Label label, List<GeoPoint> points) {
+        this.id = id;
         this.label = label;
         this.points = points;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Label getLabel() {
@@ -32,7 +42,8 @@ public class Room {
     @Override
     public String toString() {
         return "Room{" +
-                "label=" + label +
+                "id=" + id +
+                ", label=" + label +
                 ", points=" + points +
                 '}';
     }

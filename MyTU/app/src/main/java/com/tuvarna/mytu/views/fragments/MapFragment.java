@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,8 +25,11 @@ import com.tuvarna.mytu.R;
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.BuildingDetails;
 import com.tuvarna.mytu.models.Room;
+import com.tuvarna.mytu.models.RoomDetails;
 import com.tuvarna.mytu.repositories.BuildingRepository;
-import com.tuvarna.mytu.repositories.BuildingsCallback;
+import com.tuvarna.mytu.repositories.IBuildingsCallback;
+import com.tuvarna.mytu.repositories.IRoomsCallback;
+import com.tuvarna.mytu.repositories.RoomRepository;
 import com.tuvarna.mytu.util.Constants;
 import com.tuvarna.mytu.util.CustomMapView;
 import com.tuvarna.mytu.util.FloorSelector;
@@ -50,9 +54,10 @@ import java.util.List;
  * Use the {@link MapFragment} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment implements BuildingsCallback, MapObjectClicker {
+public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsCallback, MapObjectClicker {
 
     BuildingRepository buildingRepository;
+    RoomRepository roomRepository;
 
     private CustomMapView map = null;
     private double lastZoomLevel = 0;
@@ -83,6 +88,7 @@ public class MapFragment extends Fragment implements BuildingsCallback, MapObjec
         progressBarHolder.setVisibility(View.VISIBLE);
 
         buildingRepository = new BuildingRepository();
+        roomRepository = new RoomRepository();
 
         this.map = view.findViewById(R.id.map);
         spinner = (Spinner) view.findViewById(R.id.floor_spinner);
@@ -175,7 +181,7 @@ public class MapFragment extends Fragment implements BuildingsCallback, MapObjec
 
         bottomSheet = view.findViewById(R.id.map_bottom_sheet);
         mapBottomSheet = BottomSheetBehavior.from(bottomSheet);
-        mapBottomSheet.setHideable(false);
+        //mapBottomSheet.setHideable(false);
 
         mapBottomSheet.setPeekHeight(360);
         mapBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -192,6 +198,11 @@ public class MapFragment extends Fragment implements BuildingsCallback, MapObjec
                         break;
                     case BottomSheetBehavior.STATE_HALF_EXPANDED:
                         // Do something when the bottom sheet is half expanded
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        map.deselectBuildingPolygon();
+                        map.deselectRoomPolygon();
+                        map.invalidate();
                         break;
                 }
             }
@@ -265,15 +276,19 @@ public class MapFragment extends Fragment implements BuildingsCallback, MapObjec
 
     @Override
     public void onBuildingDetailsReceived(BuildingDetails buildingDetails) {
-        Log.i("19621795_", buildingDetails.toString());
         bottomSheet.setVisibility(View.VISIBLE);
-        mapBottomSheet.setHideable(false);
+        //mapBottomSheet.setHideable(false);
         mapBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
         TextView title = (TextView) bottomSheet.findViewById(R.id.bottom_sheet_title);
         TextView subTitle = (TextView) bottomSheet.findViewById(R.id.bottom_sheet_sub_title);
         TextView description = (TextView) bottomSheet.findViewById(R.id.bottom_sheet_description);
         ImageView image = (ImageView) bottomSheet.findViewById(R.id.bottom_sheet_image);
-        Picasso.get().load(buildingDetails.getImageUrl()).into(image);
+        if(URLUtil.isValidUrl(buildingDetails.getImageUrl())) {
+            Picasso.get().load(buildingDetails.getImageUrl()).into(image);
+            image.setVisibility(View.VISIBLE);
+        } else {
+            image.setVisibility(View.GONE);
+        }
         title.setText(buildingDetails.getBuilding().getLabel().getText());
         subTitle.setText(buildingDetails.getSubTitle());
         description.setText(Html.fromHtml(buildingDetails.getDescription()));
@@ -289,7 +304,36 @@ public class MapFragment extends Fragment implements BuildingsCallback, MapObjec
 
     @Override
     public void onRoomClick(Room room) {
+        Log.i("19621795_", "Room clicked");
+        roomRepository.getRoomDetails(room.getId(), MapFragment.this);
+    }
 
+    @Override
+    public void onRoomDetailsReceived(RoomDetails roomDetails) {
+        bottomSheet.setVisibility(View.VISIBLE);
+        //mapBottomSheet.setHideable(false);
+        mapBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        TextView title = (TextView) bottomSheet.findViewById(R.id.bottom_sheet_title);
+        TextView subTitle = (TextView) bottomSheet.findViewById(R.id.bottom_sheet_sub_title);
+        TextView description = (TextView) bottomSheet.findViewById(R.id.bottom_sheet_description);
+        ImageView image = (ImageView) bottomSheet.findViewById(R.id.bottom_sheet_image);
+        if(URLUtil.isValidUrl(roomDetails.getImageUrl())) {
+            Picasso.get().load(roomDetails.getImageUrl()).into(image);
+            image.setVisibility(View.VISIBLE);
+        } else {
+            image.setVisibility(View.GONE);
+        }
+        title.setText(roomDetails.getRoom().getLabel().getText());
+        subTitle.setText(roomDetails.getSubTitle());
+        description.setText(Html.fromHtml(roomDetails.getDescription()));
+    }
+
+    @Override
+    public void onRoomDetailsReceiveFailure(Throwable t) {
+        Log.i("19621795_", "Room Details NOT received." + t.getMessage());
+        bottomSheet.setVisibility(View.INVISIBLE);
+        mapBottomSheet.setHideable(true);
+        mapBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
     public static void longInfo(String str) {

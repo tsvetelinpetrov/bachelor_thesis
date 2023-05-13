@@ -1,7 +1,5 @@
 package com.tuvarna.mytu.repositories;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.tuvarna.mytu.api.ApiService;
@@ -39,7 +37,7 @@ public class BuildingRepository implements IBuildingRepository {
     }
 
     @Override
-    public void getAllBuildings(BuildingsCallback callback) {
+    public void getAllBuildings(IBuildingsCallback callback) {
         try {
             Call<List<Building>> call = service.getBuildings();
 
@@ -65,7 +63,7 @@ public class BuildingRepository implements IBuildingRepository {
     }
 
     @Override
-    public void getBuildingDetails(int buildingId, BuildingsCallback callback) {
+    public void getBuildingDetails(int buildingId, IBuildingsCallback callback) {
         try {
             Call<BuildingDetails> call = service.getBuildingDetails(buildingId);
 

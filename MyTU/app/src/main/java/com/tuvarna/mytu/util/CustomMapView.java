@@ -21,7 +21,6 @@ import com.tuvarna.mytu.R;
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.Floor;
 import com.tuvarna.mytu.models.Room;
-import com.tuvarna.mytu.repositories.BuildingsCallback;
 
 import org.osmdroid.tileprovider.MapTileProviderBase;
 import org.osmdroid.util.GeoPoint;
@@ -305,6 +304,8 @@ public class CustomMapView extends MapView {
                     polygon.getOutlinePaint().setStrokeWidth(0);
                     polygon.getOutlinePaint().setColor(Color.TRANSPARENT);
                     polygon.setOnClickListener((polygon1, mapView, eventPos) -> {
+                        RoomPolygon polygon2 = (RoomPolygon) polygon1;
+                        callback.onRoomClick(polygon2.getRoom());
                         if(selectedRoomPolygon != null) {
                             selectedRoomPolygon.getOutlinePaint().setStrokeWidth(0);
                             selectedRoomPolygon.getOutlinePaint().setColor(Color.TRANSPARENT);

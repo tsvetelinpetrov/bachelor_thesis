@@ -2,6 +2,7 @@ package com.tuvarna.mytu.api;
 
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.BuildingDetails;
+import com.tuvarna.mytu.models.RoomDetails;
 
 import java.util.List;
 
@@ -15,4 +16,7 @@ public interface ApiService {
 
     @GET("api/Building/details/{id}")
     Call<BuildingDetails> getBuildingDetails(@Path("id") int buildingId);
+
+    @GET("api/Room/details/{id}")
+    Call<RoomDetails> getRoomDetails(@Path("id") int roomId);
 }

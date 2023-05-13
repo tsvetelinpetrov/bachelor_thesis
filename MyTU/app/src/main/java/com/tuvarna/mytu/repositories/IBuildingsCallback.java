@@ -5,7 +5,7 @@ import com.tuvarna.mytu.models.BuildingDetails;
 
 import java.util.List;
 
-public interface BuildingsCallback {
+public interface IBuildingsCallback {
     void onBuildingsReceived(List<Building> buildings);
     void onBuildingsReceiveFailure(Throwable t);
 
