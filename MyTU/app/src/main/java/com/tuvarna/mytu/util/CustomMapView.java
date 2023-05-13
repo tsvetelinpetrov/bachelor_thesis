@@ -21,6 +21,7 @@ import com.tuvarna.mytu.R;
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.Floor;
 import com.tuvarna.mytu.models.Room;
+import com.tuvarna.mytu.repositories.BuildingsCallback;
 
 import org.osmdroid.tileprovider.MapTileProviderBase;
 import org.osmdroid.util.GeoPoint;
@@ -197,7 +198,7 @@ public class CustomMapView extends MapView {
         this.getOverlays().add(mRotationGestureOverlay);
     }
 
-    public void generateBuildingPolygons(List<Building> buildings) {
+    public void generateBuildingPolygons(List<Building> buildings, MapObjectClicker callback) {
         for(Building building : buildings) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             View markerLayout = inflater.inflate(R.layout.custom_marker_layout, null);
@@ -226,6 +227,7 @@ public class CustomMapView extends MapView {
             polygon.getOutlinePaint().setColor(Color.TRANSPARENT);
             polygon.setOnClickListener((polygon1, mapView, eventPos) -> {
                 BuildingPolygon polygon3 = (BuildingPolygon) polygon1;
+                callback.onBuildingClick(polygon3.getBuilding());
                 if(selectedBuildingPolygon != null) {
                     selectedBuildingPolygon.getOutlinePaint().setStrokeWidth(0);
                     selectedBuildingPolygon.getOutlinePaint().setColor(Color.TRANSPARENT);
@@ -262,7 +264,7 @@ public class CustomMapView extends MapView {
         return bitmap;
     }
 
-    public void generateRoomPolygons(List<Building> buildings) {
+    public void generateRoomPolygons(List<Building> buildings, MapObjectClicker callback) {
         for(Building building : buildings) {
             for (Floor fl : building.getFloors()) {
                 for (Room room : fl.getRooms()) {

@@ -1,9 +1,12 @@
 package com.tuvarna.mytu.repositories;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.tuvarna.mytu.api.ApiService;
 import com.tuvarna.mytu.models.Building;
+import com.tuvarna.mytu.models.BuildingDetails;
 import com.tuvarna.mytu.util.Constants;
 
 import java.util.List;
@@ -58,6 +61,33 @@ public class BuildingRepository implements IBuildingRepository {
             });
         } catch (Exception e) {
             callback.onBuildingsReceiveFailure(e);
+        }
+    }
+
+    @Override
+    public void getBuildingDetails(int buildingId, BuildingsCallback callback) {
+        try {
+            Call<BuildingDetails> call = service.getBuildingDetails(buildingId);
+
+            call.enqueue(new Callback() {
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) {
+                    if (response.isSuccessful() && response.code() == 200) {
+                        BuildingDetails buildingDetails = (BuildingDetails) response.body();
+                        callback.onBuildingDetailsReceived(buildingDetails);
+                    } else {
+                        callback.onBuildingDetailsReceiveFailure(new Throwable("HTTP Error code: "
+                                + response.code()));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call call, Throwable t) {
+                    callback.onBuildingDetailsReceiveFailure(t);
+                }
+            });
+        } catch (Exception e) {
+            callback.onBuildingDetailsReceiveFailure(e);
         }
     }
 }
