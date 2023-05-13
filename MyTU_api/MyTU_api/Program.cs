@@ -31,8 +31,10 @@ builder.Services.AddDbContext<MyTU_apiDbContext>(options => {
 
 // Add Services Scope
 builder.Services.AddScoped<IBuildingService, BuildingService>();
-
 builder.Services.AddScoped<IBuildingRepository, BuildingRepository>();
+
+builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 
 var app = builder.Build();
 
