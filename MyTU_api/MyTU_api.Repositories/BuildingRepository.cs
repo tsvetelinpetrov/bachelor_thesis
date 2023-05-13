@@ -45,7 +45,7 @@ namespace MyTU_api.Repositories
                         Id = b.Building.Id,
                         Label = b.Building.Label
                     },
-                    ImageUrl = "http://creativecode.tu-varna.bg/mapsource/images/" + b.ImageUrl,
+                    ImageUrl = (b != null && b.ImageUrl != null && b.ImageUrl != "") ? "http://creativecode.tu-varna.bg/mapsource/images/" + b.ImageUrl : null,
                     SubTitle = b.SubTitle,
                     Description = b.Description
                 })
