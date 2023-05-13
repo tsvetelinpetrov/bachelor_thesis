@@ -20,5 +20,11 @@ namespace MyTU_api.Services
             var buildings = await _buildingRepository.Get();
             return buildings;
         }
+
+        public Task<BuildingDetailsDto> GetDetails(int buildingId)
+        {
+            var buildingDetails = _buildingRepository.getDetails(buildingId);
+            return buildingDetails;
+        }
     }
 }

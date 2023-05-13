@@ -20,5 +20,13 @@ namespace MyTU_api.Controllers
             var buildings = await _buildingService.Get();
             return Ok(buildings);
         }
+
+        // GET api/<BuildingController>/details/<BuildingId>
+        [HttpGet("details/{buildingId}")]
+        public async Task<IActionResult> GetDetails(int buildingId)
+        {
+            var buildingDetails = await _buildingService.GetDetails(buildingId);
+            return Ok(buildingDetails);
+        }
     }
 }

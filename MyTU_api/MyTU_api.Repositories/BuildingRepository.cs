@@ -1,6 +1,7 @@
 ﻿using MyTU_api.Infrastructure;
 using MyTU_api.Models;
 using Microsoft.EntityFrameworkCore;
+using MyTU_api.Entities;
 
 namespace MyTU_api.Repositories
 {
@@ -30,6 +31,27 @@ namespace MyTU_api.Repositories
                 .ToArrayAsync();
 
             return buildings;
+        }
+
+        public Task<BuildingDetailsDto?> getDetails(int buildingId)
+        {
+            var buildingDetails = _dbContext.BuildingDetails
+                .Where(b => b.Building.Id == buildingId)
+                .Select(b => new BuildingDetailsDto
+                {
+                    Id = b.Id,
+                    Building = new Building
+                    {
+                        Id = b.Building.Id,
+                        Label = b.Building.Label
+                    },
+                    ImageUrl = "http://creativecode.tu-varna.bg/mapsource/images/" + b.ImageUrl,
+                    SubTitle = b.SubTitle,
+                    Description = b.Description
+                })
+                //.AsNoTracking()
+                .FirstOrDefaultAsync();
+            return buildingDetails;
         }
     }
 }

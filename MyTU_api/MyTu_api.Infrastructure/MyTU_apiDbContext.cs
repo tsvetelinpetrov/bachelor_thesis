@@ -18,6 +18,7 @@ namespace MyTU_api.Infrastructure
         public DbSet<Room> Rooms { get; set; }
         public DbSet<RoomPoint> RoomPoints { get; set; }
         public DbSet<Floor> Floor { get; set; }
+        public DbSet<BuildingDetails> BuildingDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
