@@ -32,7 +32,7 @@ namespace MyTU_api.Services
 
             foreach (var edge in graphNodeEdges.ToList())
             {
-                double dist = Distance(edge.NodeX.Lattitude, edge.NodeX.Longitude, edge.NodeY.Lattitude, edge.NodeY.Longitude);
+                double dist = Distance(edge.NodeX.Latitude, edge.NodeX.Longitude, edge.NodeY.Latitude, edge.NodeY.Longitude);
                 //Console.WriteLine(Math.Round(dist, 2));
             }
 
