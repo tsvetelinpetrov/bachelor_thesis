@@ -10,5 +10,6 @@ namespace MyTU_api.Models
         public ICollection<Floor> Floors { get; set; }
         public int FillColor { get; set; }
         public int StrokeColor { get; set; }
+        public GraphNode GraphNode { get; set; }
     }
 }

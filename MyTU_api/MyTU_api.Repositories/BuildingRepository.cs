@@ -25,7 +25,8 @@ namespace MyTU_api.Repositories
                     Points = b.Points,
                     Floors = b.Floors,
                     FillColor = b.FillColor,
-                    StrokeColor = b.StrokeColor
+                    StrokeColor = b.StrokeColor,
+                    GraphNode = b.GraphNode
                 })
                 //.AsNoTracking()
                 .ToArrayAsync();
