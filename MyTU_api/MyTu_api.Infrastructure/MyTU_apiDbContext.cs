@@ -20,6 +20,8 @@ namespace MyTU_api.Infrastructure
         public DbSet<Floor> Floor { get; set; }
         public DbSet<BuildingDetails> BuildingDetails { get; set; }
         public DbSet<RoomDetails> RoomDetails { get; set; }
+        public DbSet<GraphNode> GraphNodes { get; set; }
+        public DbSet<GraphNodesEdge> GraphNodesEdges { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

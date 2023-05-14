@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyTU_api.Infrastructure;
 
@@ -10,9 +11,11 @@ using MyTU_api.Infrastructure;
 namespace MyTU_api.Infrastructure.Migrations
 {
     [DbContext(typeof(MyTU_apiDbContext))]
-    partial class MyTU_apiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230513233420_MakeSomeFieldsNullable")]
+    partial class MakeSomeFieldsNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace MyTU_api.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("BuildingId")
+                    b.Property<int>("BuildingId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -83,7 +86,7 @@ namespace MyTU_api.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("BuildingId")
+                    b.Property<int>("BuildingId")
                         .HasColumnType("int");
 
                     b.Property<double>("MLatitude")
@@ -105,7 +108,7 @@ namespace MyTU_api.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("BuildingId")
+                    b.Property<int>("BuildingId")
                         .HasColumnType("int");
 
                     b.Property<int>("Level")
@@ -273,7 +276,7 @@ namespace MyTU_api.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("RoomId")
+                    b.Property<int>("RoomId")
                         .HasColumnType("int");
 
                     b.Property<string>("SubTitle")
@@ -299,7 +302,7 @@ namespace MyTU_api.Infrastructure.Migrations
                     b.Property<double>("MLongitude")
                         .HasColumnType("double");
 
-                    b.Property<int?>("RoomId")
+                    b.Property<int>("RoomId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -328,7 +331,9 @@ namespace MyTU_api.Infrastructure.Migrations
                 {
                     b.HasOne("MyTU_api.Entities.Building", "Building")
                         .WithMany()
-                        .HasForeignKey("BuildingId");
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Building");
                 });
@@ -337,14 +342,18 @@ namespace MyTU_api.Infrastructure.Migrations
                 {
                     b.HasOne("MyTU_api.Entities.Building", null)
                         .WithMany("Points")
-                        .HasForeignKey("BuildingId");
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyTU_api.Entities.Floor", b =>
                 {
                     b.HasOne("MyTU_api.Entities.Building", null)
                         .WithMany("Floors")
-                        .HasForeignKey("BuildingId");
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyTU_api.Entities.GraphNodesEdge", b =>
@@ -389,7 +398,9 @@ namespace MyTU_api.Infrastructure.Migrations
                 {
                     b.HasOne("MyTU_api.Entities.Room", "Room")
                         .WithMany()
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Room");
                 });
@@ -398,7 +409,9 @@ namespace MyTU_api.Infrastructure.Migrations
                 {
                     b.HasOne("MyTU_api.Entities.Room", null)
                         .WithMany("Points")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyTU_api.Entities.Building", b =>

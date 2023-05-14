@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public double MLongitude { get; set; }
         public double MLatitude { get; set; }
-        public int BuildingId { get; set; }
+        public int? BuildingId { get; set; }
         
     }
 }

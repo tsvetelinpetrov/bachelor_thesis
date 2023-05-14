@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyTU_api.Libraries\MyTU_api.Libraries.csproj" />
-    <ProjectReference Include="..\MyTU_api.Repositories\MyTU_api.Repositories.csproj" />
+    <ProjectReference Include="..\MyTU_api.Entities\MyTU_api.Entities.csproj" />
+    <ProjectReference Include="..\MyTU_api.Models\MyTU_api.Models.csproj" />
   </ItemGroup>
 
 </Project>

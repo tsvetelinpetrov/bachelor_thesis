@@ -36,6 +36,9 @@ builder.Services.AddScoped<IBuildingRepository, BuildingRepository>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 
+builder.Services.AddScoped<INavigationService, NavigationService>();
+builder.Services.AddScoped<INavigationRepository, NavigationRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
