@@ -12,8 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.webkit.URLUtil;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -68,6 +71,8 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
 
     LinearLayout bottomSheet;
     private BottomSheetBehavior mapBottomSheet;
+    private Button navigateButton;
+    private ConstraintLayout destinationChoseLayout;
 
     public MapFragment() { }
 
@@ -222,6 +227,45 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
         mapBottomSheet.setHideable(true);
         mapBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
 
+        navigateButton = view.findViewById(R.id.bottom_sheet_nav_button);
+        destinationChoseLayout = view.findViewById(R.id.destination_chose_layout);
+        destinationChoseLayout.setVisibility(View.GONE);
+        navigateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(map.getSelectedRoomPolygon() != null) {
+                    Log.i("19621795_", map.getSelectedRoomPolygon().getRoom().getGraphNode().toString());
+                    Animation animation = new AlphaAnimation(0f, 1f);
+                    Animation animation2 = new AlphaAnimation(1f, 0f);
+                    animation.setDuration(300);
+                    animation2.setDuration(300);
+                    destinationChoseLayout.startAnimation(animation);
+                    destinationChoseLayout.setVisibility(View.VISIBLE);
+                    bottomSheet.startAnimation(animation2);
+                    bottomSheet.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        ImageView destinationChoseLayoutBackButton = view.findViewById(R.id.destination_chose_layout_back_button);
+        destinationChoseLayoutBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Animation animation1 = new AlphaAnimation(1f, 0.5f);
+                animation1.setDuration(50);
+                animation1.setRepeatCount(1);
+                animation1.setRepeatMode(Animation.REVERSE);
+
+                // Start animation
+                v.startAnimation(animation1);
+                bottomSheet.setVisibility(View.VISIBLE);
+                Animation animation = new AlphaAnimation(1f, 0f);
+                animation.setDuration(300);
+                destinationChoseLayout.startAnimation(animation);
+                destinationChoseLayout.setVisibility(View.GONE);
+
+            }
+        });
 
         return view;
     }

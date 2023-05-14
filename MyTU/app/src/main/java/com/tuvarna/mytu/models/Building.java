@@ -6,15 +6,17 @@ import java.util.List;
 
 public class Building {
     private int id;
-    Label label;
-    List<GeoPoint> points;
-    List<Floor> floors;
+    private Label label;
+    private List<GeoPoint> points;
+    private List<Floor> floors;
+    private GraphNode graphNode;
 
-    public Building(int id, Label label, List<GeoPoint> points, List<Floor> floors) {
+    public Building(int id, Label label, List<GeoPoint> points, List<Floor> floors, GraphNode graphNode) {
         this.id = id;
         this.label = label;
         this.points = points;
         this.floors = floors;
+        this.graphNode = graphNode;
     }
 
     public int getId() {
@@ -49,6 +51,14 @@ public class Building {
         this.floors = floors;
     }
 
+    public GraphNode getGraphNode() {
+        return graphNode;
+    }
+
+    public void setGraphNode(GraphNode graphNode) {
+        this.graphNode = graphNode;
+    }
+
     @Override
     public String toString() {
         return "Building{" +
@@ -56,6 +66,7 @@ public class Building {
                 ", label=" + label +
                 ", points=" + points +
                 ", floors=" + floors +
+                ", graphNode=" + graphNode +
                 '}';
     }
 }

@@ -6,13 +6,15 @@ import java.util.List;
 
 public class Room {
     private int id;
-    Label label;
-    List<GeoPoint> points;
+    private Label label;
+    private List<GeoPoint> points;
+    private GraphNode graphNode;
 
-    public Room(int id, Label label, List<GeoPoint> points) {
+    public Room(int id, Label label, List<GeoPoint> points, GraphNode graphNode) {
         this.id = id;
         this.label = label;
         this.points = points;
+        this.graphNode = graphNode;
     }
 
     public int getId() {
@@ -39,12 +41,21 @@ public class Room {
         this.points = points;
     }
 
+    public GraphNode getGraphNode() {
+        return graphNode;
+    }
+
+    public void setGraphNode(GraphNode graphNode) {
+        this.graphNode = graphNode;
+    }
+
     @Override
     public String toString() {
         return "Room{" +
                 "id=" + id +
                 ", label=" + label +
                 ", points=" + points +
+                ", graphNode=" + graphNode +
                 '}';
     }
 }

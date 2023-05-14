@@ -31,7 +31,9 @@
             android:layout_height="fill_parent"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="168dp"
-            tools:layout_editor_absoluteY="144dp" />
+            tools:layout_editor_absoluteY="144dp" >
+
+        </com.tuvarna.mytu.util.CustomMapView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,6 +57,132 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/destination_chose_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/mainBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp">
+
+                <ImageView
+                    android:id="@+id/destination_chose_layout_back_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="10dp"
+                    app:srcCompat="@drawable/ic_arrow_back"
+                    app:tint="@color/mainText"
+                    tools:srcCompat="@drawable/ic_arrow_back" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.6"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.188"
+                        app:srcCompat="@drawable/ic_outline_circle"
+                        tools:srcCompat="@drawable/ic_outline_circle"
+                        app:tint="@color/mainText"/>
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="36dp"
+                        android:layout_height="41dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/dots_three_thin_vertical"
+                        tools:srcCompat="@drawable/dots_three_thin_vertical"
+                        app:tint="@color/mainText"/>
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.869"
+                        app:srcCompat="@drawable/ic_outline_location_on"
+                        app:tint="#d7342e"
+                        tools:srcCompat="@drawable/ic_outline_location_on" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    >
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:hint="Начално местоположение"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/edittext_radius_background"
+                        android:padding="7dp"
+                        android:layout_marginLeft="10dp"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:hint="Дестинация"
+                        android:background="@drawable/edittext_radius_background"
+                        android:padding="7dp"
+                        android:layout_marginLeft="10dp"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/ic_up_down_arrow"
+                    tools:srcCompat="@drawable/ic_up_down_arrow"
+                    android:layout_margin="10dp"
+                    app:tint="@color/mainText"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/mainText"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include layout="@layout/map_bottom_sheet"/>

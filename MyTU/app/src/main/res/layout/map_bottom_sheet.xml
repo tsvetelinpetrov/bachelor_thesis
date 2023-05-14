@@ -15,7 +15,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="@color/mainBackground"
         app:cardCornerRadius="10dp"
         app:cardElevation="0dp">
         
@@ -28,7 +28,7 @@
             <View
                 android:layout_width="30dp"
                 android:layout_height="5dp"
-                android:background="@color/black"
+                android:background="@color/mainText"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"/>
 
@@ -36,8 +36,8 @@
                 android:id="@+id/bottom_sheet_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Object Name"
-                android:textColor="@color/black"
+                android:text="{Object name}"
+                android:textColor="@color/mainText"
                 android:textStyle="bold"
                 android:textSize="20sp"/>
 
@@ -45,15 +45,15 @@
                 android:id="@+id/bottom_sheet_sub_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Машинен факултет, 3 етаж"
-                android:textColor="@color/black"
+                android:text="{Details}"
+                android:textColor="@color/mainText"
                 android:textSize="16sp"/>
 
             <Button
                 android:id="@+id/bottom_sheet_nav_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Упътвания"
+                android:text="@string/directions"
                 android:drawableLeft="@drawable/ic_location_arrow"
                 android:drawableTint="@color/white"
                 android:textColor="@color/white"/>
@@ -78,8 +78,8 @@
                         android:id="@+id/bottom_sheet_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Description"
-                        android:textColor="@color/black"/>
+                        android:text="{Description}"
+                        android:textColor="@color/mainText"/>
                 </LinearLayout>
             </ScrollView>
 

@@ -107,6 +107,14 @@ public class CustomMapView extends MapView {
         return this.level;
     }
 
+    public BuildingPolygon getSelectedBuildingPolygon() {
+        return selectedBuildingPolygon;
+    }
+
+    public RoomPolygon getSelectedRoomPolygon() {
+        return selectedRoomPolygon;
+    }
+
     static GeoPoint getCentroid(List<GeoPoint> points) {
         if(points.isEmpty()) {
             return new GeoPoint(0.0, 0.0);
@@ -232,6 +240,7 @@ public class CustomMapView extends MapView {
                     selectedBuildingPolygon.getOutlinePaint().setColor(Color.TRANSPARENT);
                 }
                 selectedBuildingPolygon = (BuildingPolygon) polygon1;
+                selectedRoomPolygon = null;
                 selectedBuildingPolygon.getOutlinePaint().setStrokeWidth(10);
                 selectedBuildingPolygon.getOutlinePaint().setColor(Color.parseColor(
                         Constants.MAP_POLYGON_SELECT_STROKE_COLOR));
@@ -314,6 +323,7 @@ public class CustomMapView extends MapView {
                         polygon1.getOutlinePaint().setColor(Color.parseColor(
                                 Constants.MAP_POLYGON_SELECT_STROKE_COLOR));
                         selectedRoomPolygon = (RoomPolygon) polygon1;
+                        selectedBuildingPolygon = null;
                         mapView.invalidate();
                         return false;
                     });

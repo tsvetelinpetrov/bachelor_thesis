@@ -8,7 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="mainBackground">#FFFFFFFF</color>
-    <color name="mainText">#000</color>
+    <color name="mainBackground">#131313</color>
+    <color name="mainText">#FFF</color>
     <color name="red">#FF0000</color>
 </resources>
