@@ -14,7 +14,7 @@
     <item
         android:id="@+id/chatFragment"
         android:enabled="true"
-        android:icon="@drawable/ic_chat"
+        android:icon="@drawable/ic_robot_face"
         android:title="@string/bottom_menu_3"/>
 
     <item

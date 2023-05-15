@@ -4,7 +4,7 @@ import org.osmdroid.util.GeoPoint;
 
 public class Constants {
     public final static String BASE_API_URL = "http://192.168.0.100:5184/";
-    public final static String CHATBOT_API_URL = "http://creativecode.tu-varna.bg:5005/webhooks/rest/webhook";
+    public final static String CHATBOT_API_URL = "http://creativecode.tu-varna.bg:5005/";
 
     // Map settings
     public final static String TILE_MAP_SOURCE = "custom";

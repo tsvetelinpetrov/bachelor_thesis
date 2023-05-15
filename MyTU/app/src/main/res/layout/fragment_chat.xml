@@ -33,9 +33,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/edittext_radius_background"
-                android:hint="Напиши съобщение"
+                android:hint="@string/chat_write"
                 android:maxLines="3"
-                android:padding="16dp"
+                android:padding="10dp"
                 android:textColor="@color/mainText"/>
 
             <Button
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:background="@drawable/edittext_radius_background"
-                android:text="Изпрати"
+                android:text="@string/chat_send"
                 android:textColor="@color/white"/>
 
         </LinearLayout>

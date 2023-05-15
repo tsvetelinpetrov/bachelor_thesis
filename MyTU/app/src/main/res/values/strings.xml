@@ -4,10 +4,20 @@
     <!--Navigation menu strings-->
     <string name="bottom_menu_1">Карта</string>
     <string name="bottom_menu_2">Разписи</string>
-    <string name="bottom_menu_3">ЧЗВ</string>
+    <string name="bottom_menu_3">Чат бот</string>
     <string name="bottom_menu_4">Още</string>
 
     <string name="directions">Упътвания</string>
+
+    <string name="chat_write">Напиши съобщение...</string>
+    <string name="chat_send">Изпрати</string>
+    <string name="chat_no_message">Моля въведете съобщение!</string>
+    <string name="chart_first_response">Здравейте! Аз съм езиковият модел 🤖 на ТУ - Варна.
+        Трениран съм на милиарди въпроси към служители на ТУ и техните отговори 😎.
+        Как мога да ви бъда полезен? 🤔</string>
+    <string name="chart_second_response">В момента съм в почивка 🙄, елате малко по-късно! 😐</string>
+    <string name="chart_second_2_response">Тук не е информация! 😒</string>
+    <string name="chart_third_response">Само се занасям 🤭! Питай, каквото душа ти сака, душицо! 🤗🤗</string>
 
     <string name="ts_petrov">Tsvetelin Petrov</string>
     <string name="hello_blank_fragment">Test</string>

@@ -1,6 +1,7 @@
 package com.tuvarna.mytu.adapters;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,7 @@ public class ChatMessageAdapter extends BaseAdapter {
         LinearLayout messageHolder = convertView.findViewById(R.id.messageHolder);
 
         Picasso.get().load(message.getAvatar()).into(messageImageView);
-        messageTextView.setText(message.getText());
+        messageTextView.setText(Html.fromHtml(message.getText()));
         if(message.getSender() != null && !Objects.equals(message.getSender(), "")) {
             messageHolder.setBackgroundColor(mContext.getResources().getColor(R.color.secondaryBackground));
         } else {
