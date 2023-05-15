@@ -1,20 +1,20 @@
 package com.tuvarna.mytu.models;
 
-import androidx.annotation.NonNull;
-
 import org.osmdroid.util.GeoPoint;
 
 public class Label {
-    String text;
-    String mapText;
-    double mLatitude;
-    double mLongitude;
-    int icon;
-    String iconColor;
-    GeoPoint location;
+    private String text;
+    private String subText;
+    private String mapText;
+    private double mLatitude;
+    private double mLongitude;
+    private int icon;
+    private String iconColor;
+    private GeoPoint location;
 
-    public Label(String text, String mapText, double mLatitude, double mLongitude, int icon, String iconColor) {
+    public Label(String text, String subText, String mapText, double mLatitude, double mLongitude, int icon, String iconColor) {
         this.text = text;
+        this.subText = subText;
         this.mapText = mapText;
         this.mLatitude = mLatitude;
         this.mLongitude = mLongitude;
@@ -23,8 +23,9 @@ public class Label {
         this.location = new GeoPoint(mLatitude, mLongitude);
     }
 
-    public Label(String text, String mapText, GeoPoint location) {
+    public Label(String text, String subText, String mapText, GeoPoint location) {
         this.text = text;
+        this.subText = subText;
         this.mapText = mapText;
         this.location = location;
     }
@@ -37,7 +38,15 @@ public class Label {
         this.text = text;
     }
 
-        public String getMapText() {
+    public String getSubText() {
+        return subText;
+    }
+
+    public void setSubText(String subText) {
+        this.subText = subText;
+    }
+
+    public String getMapText() {
         return mapText;
     }
 
@@ -85,12 +94,16 @@ public class Label {
         this.location = location;
     }
 
-    @NonNull
     @Override
     public String toString() {
         return "Label{" +
                 "text='" + text + '\'' +
+                ", subText='" + subText + '\'' +
                 ", mapText='" + mapText + '\'' +
+                ", mLatitude=" + mLatitude +
+                ", mLongitude=" + mLongitude +
+                ", icon=" + icon +
+                ", iconColor='" + iconColor + '\'' +
                 ", location=" + location +
                 '}';
     }

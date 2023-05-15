@@ -19,14 +19,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.squareup.picasso.Picasso;
 import com.tuvarna.mytu.R;
+import com.tuvarna.mytu.adapters.ListDestinationItemsAdapter;
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.BuildingDetails;
+import com.tuvarna.mytu.models.Floor;
 import com.tuvarna.mytu.models.Room;
 import com.tuvarna.mytu.models.RoomDetails;
 import com.tuvarna.mytu.repositories.BuildingRepository;
@@ -50,6 +53,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,11 +72,13 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
     private Spinner spinner;
     private ConstraintLayout progressBarHolder;
     private List<Building> buildings;
-
+    private ArrayList<Room> rooms;
     LinearLayout bottomSheet;
     private BottomSheetBehavior mapBottomSheet;
     private Button navigateButton;
     private ConstraintLayout destinationChoseLayout;
+    private ListView destinationsListView;
+    private ListDestinationItemsAdapter listDestinationItemsAdapter;
 
     public MapFragment() { }
 
@@ -94,6 +100,7 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
 
         buildingRepository = new BuildingRepository();
         roomRepository = new RoomRepository();
+        destinationsListView = view.findViewById(R.id.destinationsListView);
 
         this.map = view.findViewById(R.id.map);
         spinner = (Spinner) view.findViewById(R.id.floor_spinner);
@@ -230,6 +237,7 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
         navigateButton = view.findViewById(R.id.bottom_sheet_nav_button);
         destinationChoseLayout = view.findViewById(R.id.destination_chose_layout);
         destinationChoseLayout.setVisibility(View.GONE);
+
         navigateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -297,6 +305,12 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
     public void onBuildingsReceived(List<Building> buildings) {
         Log.i("19621795_", "Buildings received");
         this.buildings = buildings;
+        this.rooms = new ArrayList<>();
+        for (Building building : buildings) {
+            for (Floor floors : building.getFloors()) {
+                rooms.addAll(floors.getRooms());
+            }
+        }
         map.setBuildings(buildings);
         map.generateBuildingPolygons(buildings, MapFragment.this);
         map.generateRoomPolygons(buildings, MapFragment.this);
@@ -304,6 +318,10 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
         map.drawBuildingsPolygons();
         map.drawRoomPolygons(0);
         map.removeRoomPolygons();
+        listDestinationItemsAdapter = new ListDestinationItemsAdapter(getContext(), this.rooms);
+        destinationsListView.setAdapter(listDestinationItemsAdapter);
+        listDestinationItemsAdapter.notifyDataSetChanged();
+
         progressBarHolder.setVisibility(View.INVISIBLE);
     }
 
@@ -334,7 +352,7 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
             image.setVisibility(View.GONE);
         }
         title.setText(buildingDetails.getBuilding().getLabel().getText());
-        subTitle.setText(buildingDetails.getSubTitle());
+        subTitle.setText(buildingDetails.getBuilding().getLabel().getSubText());
         description.setText(Html.fromHtml(buildingDetails.getDescription()));
     }
 
@@ -368,7 +386,7 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
             image.setVisibility(View.GONE);
         }
         title.setText(roomDetails.getRoom().getLabel().getText());
-        subTitle.setText(roomDetails.getSubTitle());
+        subTitle.setText(roomDetails.getRoom().getLabel().getSubText());
         description.setText(Html.fromHtml(roomDetails.getDescription()));
     }
 
