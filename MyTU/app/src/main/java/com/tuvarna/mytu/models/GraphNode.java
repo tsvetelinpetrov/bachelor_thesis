@@ -7,14 +7,16 @@ public class GraphNode {
     private boolean isValid;
     private boolean disabledPeople;
     private boolean forStudents;
+    private int floorLevel;
 
-    public GraphNode(int id, double latitude, double longitude, boolean isValid, boolean disabledPeople, boolean forStudents) {
+    public GraphNode(int id, double latitude, double longitude, boolean isValid, boolean disabledPeople, boolean forStudents, int floorLevel) {
         this.id = id;
-        latitude = latitude;
-        longitude = longitude;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.isValid = isValid;
         this.disabledPeople = disabledPeople;
         this.forStudents = forStudents;
+        this.floorLevel = floorLevel;
     }
 
     public int getId() {
@@ -65,15 +67,24 @@ public class GraphNode {
         this.forStudents = forStudents;
     }
 
+    public int getFloorLevel() {
+        return floorLevel;
+    }
+
+    public void setFloorLevel(int floorLevel) {
+        this.floorLevel = floorLevel;
+    }
+
     @Override
     public String toString() {
         return "GraphNode{" +
                 "id=" + id +
-                ", Latitude=" + latitude +
-                ", Longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 ", isValid=" + isValid +
                 ", disabledPeople=" + disabledPeople +
                 ", forStudents=" + forStudents +
+                ", floorLevel=" + floorLevel +
                 '}';
     }
 }

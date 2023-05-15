@@ -15,16 +15,48 @@ public class Navigation implements INavigationCallback {
     private Room endRoom;
     private NavigationRoute navigationRoute;
     private NavigationRepository navigationRepository;
+    private boolean isNavigating;
 
-    public Navigation(MapFragment mapFragment, Room startRoom, Room endRoom) {
+    public Navigation(MapFragment mapFragment) {
         this.mapFragment = mapFragment;
-        this.startRoom = startRoom;
-        this.endRoom = endRoom;
+        this.startRoom = null;
+        this.endRoom = null;
+        this.isNavigating = false;
 
         navigationRepository = new NavigationRepository();
     }
 
+    public Room getStartRoom() {
+        return startRoom;
+    }
+
+    public void setStartRoom(Room startRoom) {
+        this.startRoom = startRoom;
+    }
+
+    public Room getEndRoom() {
+        return endRoom;
+    }
+
+    public void setEndRoom(Room endRoom) {
+        this.endRoom = endRoom;
+    }
+
+    public NavigationRoute getNavigationRoute() {
+        return navigationRoute;
+    }
+
+    public boolean isNavigating() {
+        return isNavigating;
+    }
+
+    public void setNavigating(boolean navigating) {
+        isNavigating = navigating;
+    }
+
     public void navigateInit() {
+        if(startRoom == null || endRoom == null)
+            return;
         navigationRepository.getNavigationRoute(this, startRoom.getGraphNode().getId(),
                 endRoom.getGraphNode().getId());
     }
@@ -52,7 +84,18 @@ public class Navigation implements INavigationCallback {
     private void drawRoute() {
         RoutePainter routePainter = new RoutePainter(mapFragment.getMap());
         routePainter.drawRoute(navigationRoute);
+        mapFragment.populateRouteSheet();
+        mapFragment.showBottomRouteSheet();
+        isNavigating = true;
     }
 
-
+    public void clearRoute() {
+        startRoom = null;
+        endRoom = null;
+        RoutePainter routePainter = new RoutePainter(mapFragment.getMap());
+        routePainter.removeRoute();
+        mapFragment.hideBottomSheet();
+        mapFragment.showDestinationChoseLayout();
+        isNavigating = false;
+    }
 }

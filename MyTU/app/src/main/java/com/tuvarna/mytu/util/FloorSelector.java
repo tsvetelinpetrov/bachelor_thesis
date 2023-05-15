@@ -5,12 +5,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.tuvarna.mytu.views.fragments.MapFragment;
+
 public class FloorSelector {
+    private MapFragment mapFragment;
     private CustomMapView map = null;
     private Spinner spinner;
     private int floor = 0;
 
-    public FloorSelector(CustomMapView map, Spinner spinner, int floor) {
+    public FloorSelector(MapFragment mapFragment, CustomMapView map, Spinner spinner, int floor) {
+        this.mapFragment = mapFragment;
         this.map = map;
         this.spinner = spinner;
         this.floor = floor;
@@ -74,7 +78,9 @@ public class FloorSelector {
                     map.removeRoomPolygons();
                     map.drawRoomPolygons(map.getLevel());
                 }
-                //activity.drawAll(level);
+                if(mapFragment.getNavigation().getStartRoom() != null
+                        && mapFragment.getNavigation().getEndRoom() != null)
+                    mapFragment.getNavigation().navigateInit();
             }
 
             @Override
@@ -83,7 +89,4 @@ public class FloorSelector {
             }
         });
     }
-    
-
-
 }

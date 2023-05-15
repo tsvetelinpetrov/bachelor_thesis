@@ -1,13 +1,10 @@
 package com.tuvarna.mytu.libraries;
 
-import android.graphics.Color;
-
 import com.tuvarna.mytu.models.NavigationRoute;
 import com.tuvarna.mytu.util.ArrowPolyline;
 import com.tuvarna.mytu.util.CustomMapView;
 
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +30,8 @@ public class RoutePainter {
 
         // Add the geographic points that define the route
         for (var p : route.getNodes()) {
+            if(p.getFloorLevel() != mapView.getLevel())
+                continue;
             newPoints.add(new GeoPoint(p.getLatitude(), p.getLongitude()));
         }
         routePolyline.setPoints(newPoints);
@@ -43,8 +42,12 @@ public class RoutePainter {
         mapView.invalidate();
     }
 
+    // Remove the route from the map
     public void removeRoute() {
         ArrowPolyline routePolyline = mapView.getRoutePolyline();
+        List<GeoPoint> newPoints = new ArrayList<>();
+        routePolyline.setPoints(newPoints);
+
         if(mapView.getOverlays().contains(routePolyline))
             mapView.getOverlays().remove(routePolyline);
         mapView.invalidate();

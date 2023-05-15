@@ -27,6 +27,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.squareup.picasso.Picasso;
 import com.tuvarna.mytu.R;
 import com.tuvarna.mytu.adapters.DestinationItemsAdapter;
+import com.tuvarna.mytu.libraries.RoutePainter;
 import com.tuvarna.mytu.listeners.click.IDestinationObjectClickListener;
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.BuildingDetails;
@@ -77,11 +78,14 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
     private List<Building> buildings;
     private ArrayList<Room> rooms;
     private LinearLayout bottomSheet;
+    private LinearLayout bottomRouteSheet;
     private BottomSheetBehavior mapBottomSheet;
+    private BottomSheetBehavior mapBottomRouteSheet;
     private Button navigateButton;
     private ConstraintLayout destinationChoseLayout;
     private ListView destinationsListView;
     private DestinationItemsAdapter listDestinationItemsAdapter;
+    Navigation navigation;
 
     public MapFragment() { }
 
@@ -97,6 +101,7 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
         Log.i("19621795", "On create view");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_map, container, false);
+        navigation = new Navigation(this);
 
         progressBarHolder = view.findViewById(R.id.progress_bar_holder);
         progressBarHolder.setVisibility(View.VISIBLE);
@@ -106,6 +111,7 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
         destinationsListView = view.findViewById(R.id.destinationsListView);
 
         this.map = view.findViewById(R.id.map);
+        map.setNavigation(navigation);
         spinner = (Spinner) view.findViewById(R.id.floor_spinner);
         mapController = this.map.getController();
 
@@ -142,7 +148,7 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        FloorSelector fs=new FloorSelector(map,spinner,0);
+        FloorSelector fs=new FloorSelector(this, map,spinner,0);
         fs.selection();
 
         this.map.addMapListener(new MapListener() {
@@ -161,6 +167,7 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
                     map.removeBuildingPolygons();
                     map.deselectRoomPolygon();
                     map.drawRoomPolygons(map.getLevel());
+                    hideBottomSheet();
                 }
 
                 if(zoomLevel < 20 && lastZoomLevel > 20) {
@@ -168,6 +175,7 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
                     map.removeRoomPolygons();
                     map.deselectBuildingPolygon();
                     map.drawBuildingsPolygons();
+                    hideBottomSheet();
                 }
 
                 lastZoomLevel = zoomLevel;
@@ -277,7 +285,49 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
             }
         });
 
+        bottomRouteSheet = view.findViewById(R.id.bottom_sheet_route);
+        mapBottomRouteSheet = BottomSheetBehavior.from(bottomRouteSheet);
 
+        mapBottomRouteSheet.setPeekHeight(450);
+        mapBottomRouteSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        mapBottomRouteSheet.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        // Do something when the bottom sheet is collapsed
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        // Do something when the bottom sheet is fully expanded
+                        break;
+                    case BottomSheetBehavior.STATE_HALF_EXPANDED:
+                        // Do something when the bottom sheet is half expanded
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        navigation.clearRoute();
+                        Animation animation = new AlphaAnimation(1f, 0f);
+                        animation.setDuration(0);
+                        destinationChoseLayout.startAnimation(animation);
+                        destinationChoseLayout.setVisibility(View.INVISIBLE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                if (slideOffset > 0.2 && slideOffset < 0.8) {
+                    mapBottomRouteSheet.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
+                } else if (slideOffset > 0.8) {
+                    mapBottomRouteSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
+                } else {
+                    mapBottomRouteSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+        });
+
+        mapBottomRouteSheet.setHideable(true);
+        mapBottomRouteSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         return view;
     }
@@ -307,6 +357,10 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
 
     public CustomMapView getMap() {
         return map;
+    }
+
+    public Navigation getNavigation() {
+        return navigation;
     }
 
     @Override
@@ -342,6 +396,9 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
 
     @Override
     public void onBuildingClick(Building building) {
+        if(navigation.getStartRoom() != null && navigation.getEndRoom() != null) {
+            return;
+        }
         buildingRepository.getBuildingDetails(building.getId(), MapFragment.this);
     }
 
@@ -362,6 +419,7 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
         title.setText(buildingDetails.getBuilding().getLabel().getText());
         subTitle.setText(buildingDetails.getBuilding().getLabel().getSubText());
         description.setText(Html.fromHtml(buildingDetails.getDescription()));
+        navigateButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -374,6 +432,9 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
 
     @Override
     public void onRoomClick(Room room) {
+        if(navigation.getStartRoom() != null && navigation.getEndRoom() != null) {
+            return;
+        }
         roomRepository.getRoomDetails(room.getId(), MapFragment.this);
     }
 
@@ -394,6 +455,7 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
         title.setText(roomDetails.getRoom().getLabel().getText());
         subTitle.setText(roomDetails.getRoom().getLabel().getSubText());
         description.setText(Html.fromHtml(roomDetails.getDescription()));
+        navigateButton.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -407,11 +469,15 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
     @Override
     public void onDirectionObjectClicked(Room room) {
         Log.i("19621795_", "Clicked on " + room.getLabel().getText());
-        Navigation navigation = new Navigation(this, map.getSelectedRoomPolygon().getRoom(), room);
+        navigation.setStartRoom(map.getSelectedRoomPolygon().getRoom());
+        navigation.setEndRoom(room);
         navigation.navigateInit();
     }
 
     public void showDestinationChoseLayout() {
+        if(destinationChoseLayout.getVisibility() == View.VISIBLE)
+            return;
+
         Animation animation = new AlphaAnimation(0f, 1f);
         animation.setDuration(300);
         destinationChoseLayout.startAnimation(animation);
@@ -419,6 +485,10 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
     }
 
     public void hideDestinationChoseLayout() {
+        if(destinationChoseLayout.getVisibility() == View.GONE
+                || mapBottomSheet.getState() == BottomSheetBehavior.STATE_HIDDEN)
+            return;
+
         Animation animation = new AlphaAnimation(1f, 0f);
         animation.setDuration(300);
         destinationChoseLayout.startAnimation(animation);
@@ -426,6 +496,10 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
     }
 
     public void showBottomSheet() {
+        if(bottomSheet.getVisibility() == View.VISIBLE
+                && mapBottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED)
+            return;
+
         Animation animation = new AlphaAnimation(0f, 1f);
         animation.setDuration(300);
         bottomSheet.startAnimation(animation);
@@ -433,9 +507,46 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
     }
 
     public void hideBottomSheet() {
+        if(bottomSheet.getVisibility() == View.GONE
+                || mapBottomSheet.getState() == BottomSheetBehavior.STATE_HIDDEN)
+            return;
+
         Animation animation = new AlphaAnimation(1f, 0f);
         animation.setDuration(300);
         bottomSheet.startAnimation(animation);
         bottomSheet.setVisibility(View.GONE);
+    }
+
+    public void showBottomRouteSheet() {
+        if(bottomRouteSheet.getVisibility() == View.VISIBLE
+                && mapBottomRouteSheet.getState() == BottomSheetBehavior.STATE_EXPANDED)
+            return;
+
+        mapBottomRouteSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        Animation animation = new AlphaAnimation(0f, 1f);
+        animation.setDuration(300);
+        bottomRouteSheet.startAnimation(animation);
+        bottomRouteSheet.setVisibility(View.VISIBLE);
+    }
+
+    public void hideBottomRouteSheet() {
+        if(bottomRouteSheet.getVisibility() == View.GONE
+                || mapBottomRouteSheet.getState() == BottomSheetBehavior.STATE_HIDDEN)
+            return;
+
+        Animation animation = new AlphaAnimation(1f, 0f);
+        animation.setDuration(300);
+        bottomRouteSheet.startAnimation(animation);
+        bottomRouteSheet.setVisibility(View.GONE);
+    }
+
+    public void populateRouteSheet() {
+        TextView startRoomTextView = (TextView) bottomRouteSheet.findViewById(R.id.bottom_sheet_route_start_room);
+        TextView endRoomTextView = (TextView) bottomRouteSheet.findViewById(R.id.bottom_sheet_route_end_room);
+        TextView distanceTextView = (TextView) bottomRouteSheet.findViewById(R.id.bottom_sheet_route_distance);
+
+        startRoomTextView.setText(navigation.getStartRoom().getLabel().getText());
+        endRoomTextView.setText(navigation.getEndRoom().getLabel().getText());
+        distanceTextView.setText(navigation.getNavigationRoute().getDistance() + " метра.");
     }
 }

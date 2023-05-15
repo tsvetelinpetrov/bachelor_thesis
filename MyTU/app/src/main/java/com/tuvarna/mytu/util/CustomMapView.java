@@ -22,6 +22,7 @@ import com.tuvarna.mytu.listeners.callback.IMapObjectClickListener;
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.Floor;
 import com.tuvarna.mytu.models.Room;
+import com.tuvarna.mytu.views.fragments.MapFragment;
 
 import org.osmdroid.tileprovider.MapTileProviderBase;
 import org.osmdroid.util.GeoPoint;
@@ -35,6 +36,7 @@ import java.util.List;
 
 public class CustomMapView extends MapView {
 
+    Navigation navigation;
     private List<Building> buildings = new ArrayList<>();
     private int level = 0;
     private double lastZoomLevelBuildingDrawn = 0;
@@ -43,17 +45,6 @@ public class CustomMapView extends MapView {
     private BuildingPolygon selectedBuildingPolygon = null;
     private RoomPolygon selectedRoomPolygon = null;
     private ArrowPolyline routePolyline = new ArrowPolyline(this.getContext(), new ArrayList<>());
-
-    public CustomMapView(Context context, MapTileProviderBase tileProvider,
-                         Handler tileRequestCompleteHandler, AttributeSet attrs) {
-        super(context, tileProvider, tileRequestCompleteHandler, attrs);
-    }
-
-    public CustomMapView(Context context, MapTileProviderBase tileProvider,
-                         Handler tileRequestCompleteHandler, AttributeSet attrs,
-                         boolean hardwareAccelerated) {
-        super(context, tileProvider, tileRequestCompleteHandler, attrs, hardwareAccelerated);
-    }
 
     public CustomMapView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -70,6 +61,10 @@ public class CustomMapView extends MapView {
     public CustomMapView(Context context, MapTileProviderBase aTileProvider,
                          Handler tileRequestCompleteHandler) {
         super(context, aTileProvider, tileRequestCompleteHandler);
+    }
+
+    public void setNavigation(Navigation navigation) {
+        this.navigation = navigation;
     }
 
     public void setBuildings(List<Building> buildings) {
@@ -244,6 +239,9 @@ public class CustomMapView extends MapView {
             polygon.getOutlinePaint().setStrokeWidth(0);
             polygon.getOutlinePaint().setColor(Color.TRANSPARENT);
             polygon.setOnClickListener((polygon1, mapView, eventPos) -> {
+                if(navigation != null && navigation.isNavigating())
+                    return false;
+                
                 BuildingPolygon polygon3 = (BuildingPolygon) polygon1;
                 callback.onBuildingClick(polygon3.getBuilding());
                 if(selectedBuildingPolygon != null) {
@@ -324,6 +322,10 @@ public class CustomMapView extends MapView {
                     polygon.getOutlinePaint().setStrokeWidth(0);
                     polygon.getOutlinePaint().setColor(Color.TRANSPARENT);
                     polygon.setOnClickListener((polygon1, mapView, eventPos) -> {
+                        if(navigation != null && navigation.isNavigating())
+                            return false;
+
+
                         RoomPolygon polygon2 = (RoomPolygon) polygon1;
                         callback.onRoomClick(polygon2.getRoom());
                         if(selectedRoomPolygon != null) {

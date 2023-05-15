@@ -191,4 +191,6 @@
 
     <include layout="@layout/map_bottom_sheet"/>
 
+    <include layout="@layout/route_bottom_sheet"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

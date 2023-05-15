@@ -8,5 +8,6 @@
         public bool IsValid { get; set; }
         public bool DisabledPeople { get; set; }
         public bool ForStudents { get; set; }
+        public int FloorLevel { get; set; }
     }
 }
