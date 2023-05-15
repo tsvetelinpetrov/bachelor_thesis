@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.tuvarna.mytu.R;
 import com.tuvarna.mytu.adapters.ClassAdapter;
 import com.tuvarna.mytu.adapters.DayScheduleAdapter;
+import com.tuvarna.mytu.data.ScheduleDataGenerator;
 import com.tuvarna.mytu.models.ScheduleClass;
 import com.tuvarna.mytu.models.ScheduleDay;
 import com.tuvarna.mytu.repositories.DayScheduleRepository;
@@ -78,16 +79,10 @@ public class CalendarFragment extends Fragment implements IDayScheduleCallback{
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
         recyclerView = view.findViewById(R.id.dayScheduleRV);
-        days = new ArrayList<>();
 
-        ScheduleDay day = new ScheduleDay("Понеделник");
-        day.addClass(new ScheduleClass("Програмиране за мобилни и интернет устройства", "201 ТВ", "9:15", "11:00"));
-
-        days.add(day);
-        days.add(new ScheduleDay("Вторник"));
-        days.add(new ScheduleDay("Сряда"));
-        days.add(new ScheduleDay("Четвъртък"));
-        days.add(new ScheduleDay("Петък"));
+        ScheduleDataGenerator scheduleDataGenerator = new ScheduleDataGenerator();
+        days = scheduleDataGenerator.generate();
+        
         dayScheduleAdapter = new DayScheduleAdapter(days, getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(dayScheduleAdapter);

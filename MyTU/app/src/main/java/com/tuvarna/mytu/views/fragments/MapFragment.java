@@ -66,8 +66,8 @@ import java.util.List;
 public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsCallback,
         IMapObjectClickListener, IDestinationObjectClickListener {
 
-    BuildingRepository buildingRepository;
-    RoomRepository roomRepository;
+    private BuildingRepository buildingRepository;
+    private RoomRepository roomRepository;
 
     private CustomMapView map;
     private double lastZoomLevel = 0;
