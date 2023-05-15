@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="mainBackground">#FFFFFFFF</color>
+    <color name="secondaryBackground">#DCDCDC</color>
     <color name="mainText">#000</color>
     <color name="red">#FF0000</color>
 </resources>
