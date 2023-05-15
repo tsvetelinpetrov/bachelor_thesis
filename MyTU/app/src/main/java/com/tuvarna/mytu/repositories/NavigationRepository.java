@@ -3,7 +3,7 @@ package com.tuvarna.mytu.repositories;
 import androidx.annotation.NonNull;
 
 import com.tuvarna.mytu.api.ApiService;
-import com.tuvarna.mytu.listeners.click.INavigationCallback;
+import com.tuvarna.mytu.listeners.callback.INavigationCallback;
 import com.tuvarna.mytu.models.NavigationRoute;
 import com.tuvarna.mytu.util.Constants;
 
@@ -36,7 +36,7 @@ public class NavigationRepository implements INavigationRepository {
     @Override
     public void getNavigationRoute(INavigationCallback callback, int startNodeId, int endNodeId) {
         try {
-            Call<NavigationRoute> call = service.getRoomDetails(startNodeId, endNodeId);
+            Call<NavigationRoute> call = service.getNavigationRoute(startNodeId, endNodeId);
 
             call.enqueue(new Callback() {
                 @Override

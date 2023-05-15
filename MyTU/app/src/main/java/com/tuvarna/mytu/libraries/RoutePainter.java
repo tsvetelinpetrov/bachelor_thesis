@@ -1,8 +1,8 @@
 package com.tuvarna.mytu.libraries;
 
 import com.tuvarna.mytu.models.NavigationRoute;
-import com.tuvarna.mytu.util.ArrowPolyline;
-import com.tuvarna.mytu.util.CustomMapView;
+import com.tuvarna.mytu.views.custom.ArrowPolyline;
+import com.tuvarna.mytu.views.custom.CustomMapView;
 
 import org.osmdroid.util.GeoPoint;
 

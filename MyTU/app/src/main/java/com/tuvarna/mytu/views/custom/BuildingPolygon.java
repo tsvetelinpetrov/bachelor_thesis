@@ -1,4 +1,4 @@
-package com.tuvarna.mytu.util;
+package com.tuvarna.mytu.views.custom;
 
 import com.tuvarna.mytu.models.Building;
 

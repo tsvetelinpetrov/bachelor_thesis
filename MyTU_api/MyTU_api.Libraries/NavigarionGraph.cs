@@ -3,27 +3,27 @@ using MyTU_api.Models;
 
 namespace MyTU_api.Libraries
 {
-    public class NavigarionGraph
+    public class NavigarionGraph : INavigarionGraph
     {
-        private int V;
-        private List<Tuple<int, double, bool>>[] adj;
+        private int VerticlesNum;
+        private List<Tuple<int, double, bool>>[] Adjacency;
         List<GraphNode>? graphNodes;
         List<GraphNodesEdge>? graphNodesEdges;
 
-        public NavigarionGraph(int V)
+        public NavigarionGraph(int VerticlesNum)
         {
-            this.V = V;
-            adj = new List<Tuple<int, double, bool>>[V];
-            for (int i = 0; i < V; i++)
+            this.VerticlesNum = VerticlesNum;
+            Adjacency = new List<Tuple<int, double, bool>>[VerticlesNum];
+            for (int i = 0; i < VerticlesNum; i++)
             {
-                adj[i] = new List<Tuple<int, double, bool>>();
+                Adjacency[i] = new List<Tuple<int, double, bool>>();
             }
         }
 
-        public void AddEdge(int u, int v, double w, bool valid)
+        public void AddEdge(int firstVertexId, int secondVertexId, double weight, bool valid)
         {
-            adj[u].Add(Tuple.Create(v, w, valid));
-            adj[v].Add(Tuple.Create(u, w, valid));
+            Adjacency[firstVertexId].Add(Tuple.Create(secondVertexId, weight, valid));
+            Adjacency[secondVertexId].Add(Tuple.Create(firstVertexId, weight, valid));
         }
 
         public void SetNodes(List<GraphNode> graphNodes)
@@ -36,18 +36,18 @@ namespace MyTU_api.Libraries
             this.graphNodesEdges = graphNodesEdges;
             foreach (var edge in graphNodesEdges)
             {
-                adj[edge.NodeX.Id - 1].Add(Tuple.Create(edge.NodeY.Id - 1, edge.Weight, edge.IsValid));
-                adj[edge.NodeY.Id - 1].Add(Tuple.Create(edge.NodeX.Id - 1, edge.Weight, edge.IsValid));
+                Adjacency[edge.NodeX.Id - 1].Add(Tuple.Create(edge.NodeY.Id - 1, edge.Weight, edge.IsValid));
+                Adjacency[edge.NodeY.Id - 1].Add(Tuple.Create(edge.NodeX.Id - 1, edge.Weight, edge.IsValid));
             }
         }
 
         public NavigationRouteDto ShortestPath(int src, int dest, List<int> invalidNodes, List<Tuple<int, int>> invalidEdges)
         {
-            double[] dist = new double[V];
-            bool[] visited = new bool[V];
-            int[] prev = new int[V];
+            double[] dist = new double[VerticlesNum];
+            bool[] visited = new bool[VerticlesNum];
+            int[] prev = new int[VerticlesNum];
 
-            for (int i = 0; i < V; i++)
+            for (int i = 0; i < VerticlesNum; i++)
             {
                 dist[i] = double.MaxValue;
                 visited[i] = false;
@@ -56,12 +56,12 @@ namespace MyTU_api.Libraries
             dist[src] = 0;
             prev[src] = -1;
 
-            for (int count = 0; count < V - 1; count++)
+            for (int count = 0; count < VerticlesNum - 1; count++)
             {
                 int u = MinDistance(dist, visited);
                 visited[u] = true;
 
-                foreach (var v in adj[u])
+                foreach (var v in Adjacency[u])
                 {
                     if (!visited[v.Item1] && dist[u] + v.Item2 < dist[v.Item1]
                         && !invalidNodes.Contains(v.Item1) && IsValidEdge(u, v.Item1, invalidEdges))
@@ -99,7 +99,7 @@ namespace MyTU_api.Libraries
             double min = double.MaxValue;
             int minIndex = -1;
 
-            for (int v = 0; v < V; v++)
+            for (int v = 0; v < VerticlesNum; v++)
             {
                 if (visited[v] == false && dist[v] <= min)
                 {

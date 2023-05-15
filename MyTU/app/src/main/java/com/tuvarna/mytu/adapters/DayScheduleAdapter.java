@@ -36,7 +36,7 @@ public class DayScheduleAdapter extends RecyclerView.Adapter<DayScheduleAdapter.
         ScheduleDay daySchedule = daysSchedule.get(position);
         holder.dayName.setText(daySchedule.getDayName().toLowerCase().replaceAll(".", "$0\n"));
         recyclerView = holder.itemView.findViewById(R.id.classesRV);
-        recyclerView.setAdapter(new ClassAdapter(daySchedule.getClasses(), context, daySchedule.getBgColor()));
+        recyclerView.setAdapter(new ClassAdapter(daySchedule.getClasses(), context));
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
     }
 

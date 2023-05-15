@@ -23,7 +23,7 @@ namespace MyTU_api.Services
 
         public Task<BuildingDetailsDto> GetDetails(int buildingId)
         {
-            var buildingDetails = _buildingRepository.getDetails(buildingId);
+            var buildingDetails = _buildingRepository.GetDetails(buildingId);
             return buildingDetails;
         }
     }

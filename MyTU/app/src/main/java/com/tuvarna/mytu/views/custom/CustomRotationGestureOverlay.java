@@ -1,4 +1,4 @@
-package com.tuvarna.mytu.util;
+package com.tuvarna.mytu.views.custom;
 
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;

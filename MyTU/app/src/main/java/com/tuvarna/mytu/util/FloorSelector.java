@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.tuvarna.mytu.views.custom.CustomMapView;
 import com.tuvarna.mytu.views.fragments.MapFragment;
 
 public class FloorSelector {

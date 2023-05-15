@@ -24,8 +24,6 @@ namespace MyTU_api.Repositories
                     Label = b.Label,
                     Points = b.Points,
                     Floors = b.Floors,
-                    FillColor = b.FillColor,
-                    StrokeColor = b.StrokeColor,
                     GraphNode = b.GraphNode
                 })
                 //.AsNoTracking()
@@ -34,7 +32,7 @@ namespace MyTU_api.Repositories
             return buildings;
         }
 
-        public Task<BuildingDetailsDto?> getDetails(int buildingId)
+        public Task<BuildingDetailsDto?> GetDetails(int buildingId)
         {
             var buildingDetails = _dbContext.BuildingDetails
                 .Where(b => b.Building.Id == buildingId)

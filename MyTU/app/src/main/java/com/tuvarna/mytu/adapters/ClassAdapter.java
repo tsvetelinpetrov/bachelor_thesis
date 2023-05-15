@@ -19,13 +19,11 @@ import java.util.List;
 public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassDisciplineViewHolder> {
 
     private final List<ScheduleClass> classes;
-    private  String bgColor;
     private final Context context;
 
-    public ClassAdapter(List<ScheduleClass> classes, Context context, String bgColor) {
+    public ClassAdapter(List<ScheduleClass> classes, Context context) {
         this.classes = classes;
         this.context = context;
-        this.bgColor = bgColor;
     }
 
     @NonNull
@@ -43,7 +41,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassDiscipl
         holder.classHall.setText(classes.getClassHall());
         holder.classTime.setText(classes.getClassStartTime() + " - " + classes.getClassEndTime());
 
-        holder.itemView.findViewById(R.id.dayScheduleLayout).setBackgroundColor(Color.parseColor(bgColor));
+        //holder.itemView.findViewById(R.id.dayScheduleLayout).setBackgroundColor(Color.parseColor(bgColor));
     }
 
     @Override

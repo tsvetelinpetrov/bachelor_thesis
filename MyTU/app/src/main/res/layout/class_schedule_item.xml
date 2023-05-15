@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
-    android:background="@color/white"
+    android:background="#6096B4"
     android:layout_marginEnd="10dp"
     android:id="@+id/dayScheduleLayout">
 
@@ -20,6 +20,7 @@
         tools:ignore="MissingConstraints,RtlSymmetry"
         android:paddingTop="5dp"
         android:paddingStart="5dp"
+        android:textColor="@color/white"
         />
 
     <LinearLayout
@@ -35,11 +36,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ClassHall"
+            android:textColor="@color/white"
             android:paddingRight="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="|"/>
 
         <TextView
@@ -47,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="ClassTime"
+            android:textColor="@color/white"
             android:paddingLeft="10dp"/>
 
     </LinearLayout>

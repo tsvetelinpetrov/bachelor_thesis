@@ -80,14 +80,14 @@ public class CalendarFragment extends Fragment implements IDayScheduleCallback{
         recyclerView = view.findViewById(R.id.dayScheduleRV);
         days = new ArrayList<>();
 
-        ScheduleDay day = new ScheduleDay("Понеделник", "#00ffff");
+        ScheduleDay day = new ScheduleDay("Понеделник");
         day.addClass(new ScheduleClass("Програмиране за мобилни и интернет устройства", "201 ТВ", "9:15", "11:00"));
 
         days.add(day);
-        days.add(new ScheduleDay("Вторник", "#ffff00"));
-        days.add(new ScheduleDay("Сряда", "#00ff00"));
-        days.add(new ScheduleDay("Четвъртък", "#00ff00"));
-        days.add(new ScheduleDay("Петък", "#00ff00"));
+        days.add(new ScheduleDay("Вторник"));
+        days.add(new ScheduleDay("Сряда"));
+        days.add(new ScheduleDay("Четвъртък"));
+        days.add(new ScheduleDay("Петък"));
         dayScheduleAdapter = new DayScheduleAdapter(days, getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(dayScheduleAdapter);

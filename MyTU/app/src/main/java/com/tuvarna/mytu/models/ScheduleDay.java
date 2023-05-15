@@ -5,12 +5,10 @@ import java.util.List;
 
 public class ScheduleDay {
     private String dayName;
-    private String bgColor;
     private List<ScheduleClass> classes;
 
-    public ScheduleDay(String dayName, String bgColor) {
+    public ScheduleDay(String dayName) {
         this.dayName = dayName;
-        this.bgColor = bgColor;
         this.classes = new ArrayList<>();
     }
 
@@ -20,14 +18,6 @@ public class ScheduleDay {
 
     public void setDayName(String dayName) {
         this.dayName = dayName;
-    }
-
-    public String getBgColor() {
-        return bgColor;
-    }
-
-    public void setBgColor(String bgColor) {
-        this.bgColor = bgColor;
     }
 
     public List<ScheduleClass> getClasses() {
@@ -46,7 +36,6 @@ public class ScheduleDay {
     public String toString() {
         return "Day{" +
                 "dayName='" + dayName + '\'' +
-                ", bgColor='" + bgColor + '\'' +
                 ", classes=" + classes +
                 '}';
     }

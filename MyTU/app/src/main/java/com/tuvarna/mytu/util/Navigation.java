@@ -3,7 +3,7 @@ package com.tuvarna.mytu.util;
 import android.util.Log;
 
 import com.tuvarna.mytu.libraries.RoutePainter;
-import com.tuvarna.mytu.listeners.click.INavigationCallback;
+import com.tuvarna.mytu.listeners.callback.INavigationCallback;
 import com.tuvarna.mytu.models.NavigationRoute;
 import com.tuvarna.mytu.models.Room;
 import com.tuvarna.mytu.repositories.NavigationRepository;

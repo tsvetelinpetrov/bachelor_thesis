@@ -1,4 +1,4 @@
-package com.tuvarna.mytu.util;
+package com.tuvarna.mytu.views.custom;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -18,17 +18,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tuvarna.mytu.R;
-import com.tuvarna.mytu.listeners.callback.IMapObjectClickListener;
+import com.tuvarna.mytu.listeners.click.IMapObjectClickListener;
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.Floor;
 import com.tuvarna.mytu.models.Room;
-import com.tuvarna.mytu.views.fragments.MapFragment;
+import com.tuvarna.mytu.util.Constants;
+import com.tuvarna.mytu.util.IconSelector;
+import com.tuvarna.mytu.util.Navigation;
 
 import org.osmdroid.tileprovider.MapTileProviderBase;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.Polyline;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -241,7 +242,7 @@ public class CustomMapView extends MapView {
             polygon.setOnClickListener((polygon1, mapView, eventPos) -> {
                 if(navigation != null && navigation.isNavigating())
                     return false;
-                
+
                 BuildingPolygon polygon3 = (BuildingPolygon) polygon1;
                 callback.onBuildingClick(polygon3.getBuilding());
                 if(selectedBuildingPolygon != null) {

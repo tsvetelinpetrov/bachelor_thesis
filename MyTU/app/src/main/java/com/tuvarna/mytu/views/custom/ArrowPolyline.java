@@ -1,4 +1,4 @@
-package com.tuvarna.mytu.util;
+package com.tuvarna.mytu.views.custom;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 
 import com.tuvarna.mytu.R;
+import com.tuvarna.mytu.util.Constants;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
