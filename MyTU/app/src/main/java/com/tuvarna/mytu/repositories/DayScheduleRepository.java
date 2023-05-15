@@ -3,6 +3,7 @@ package com.tuvarna.mytu.repositories;
 import androidx.annotation.NonNull;
 
 import com.tuvarna.mytu.api.ApiService;
+import com.tuvarna.mytu.listeners.callback.IDayScheduleCallback;
 import com.tuvarna.mytu.models.ScheduleDay;
 import com.tuvarna.mytu.util.Constants;
 

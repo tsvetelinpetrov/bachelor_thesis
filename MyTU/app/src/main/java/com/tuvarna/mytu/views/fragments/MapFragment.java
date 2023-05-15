@@ -26,20 +26,22 @@ import android.widget.TextView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.squareup.picasso.Picasso;
 import com.tuvarna.mytu.R;
-import com.tuvarna.mytu.adapters.ListDestinationItemsAdapter;
+import com.tuvarna.mytu.adapters.DestinationItemsAdapter;
+import com.tuvarna.mytu.listeners.click.IDestinationObjectClickListener;
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.BuildingDetails;
 import com.tuvarna.mytu.models.Floor;
 import com.tuvarna.mytu.models.Room;
 import com.tuvarna.mytu.models.RoomDetails;
 import com.tuvarna.mytu.repositories.BuildingRepository;
-import com.tuvarna.mytu.repositories.IBuildingsCallback;
-import com.tuvarna.mytu.repositories.IRoomsCallback;
+import com.tuvarna.mytu.listeners.callback.IBuildingsCallback;
+import com.tuvarna.mytu.listeners.callback.IRoomsCallback;
 import com.tuvarna.mytu.repositories.RoomRepository;
 import com.tuvarna.mytu.util.Constants;
 import com.tuvarna.mytu.util.CustomMapView;
 import com.tuvarna.mytu.util.FloorSelector;
-import com.tuvarna.mytu.util.MapObjectClicker;
+import com.tuvarna.mytu.listeners.callback.IMapObjectClickListener;
+import com.tuvarna.mytu.util.Navigation;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
@@ -61,24 +63,25 @@ import java.util.List;
  * Use the {@link MapFragment} factory method to
  * create an instance of this fragment.
  */
-public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsCallback, MapObjectClicker {
+public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsCallback,
+        IMapObjectClickListener, IDestinationObjectClickListener {
 
     BuildingRepository buildingRepository;
     RoomRepository roomRepository;
 
-    private CustomMapView map = null;
+    private CustomMapView map;
     private double lastZoomLevel = 0;
     private IMapController mapController;
     private Spinner spinner;
     private ConstraintLayout progressBarHolder;
     private List<Building> buildings;
     private ArrayList<Room> rooms;
-    LinearLayout bottomSheet;
+    private LinearLayout bottomSheet;
     private BottomSheetBehavior mapBottomSheet;
     private Button navigateButton;
     private ConstraintLayout destinationChoseLayout;
     private ListView destinationsListView;
-    private ListDestinationItemsAdapter listDestinationItemsAdapter;
+    private DestinationItemsAdapter listDestinationItemsAdapter;
 
     public MapFragment() { }
 
@@ -175,7 +178,7 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
         MapEventsReceiver mReceive = new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
-                Log.i("19621795_p", p.getLatitude() + ", "+p.getLongitude());
+                Log.i("LocationExtract", p.getLatitude() + ", "+p.getLongitude());
                 return false;
             }
 
@@ -193,7 +196,6 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
 
         bottomSheet = view.findViewById(R.id.map_bottom_sheet);
         mapBottomSheet = BottomSheetBehavior.from(bottomSheet);
-        //mapBottomSheet.setHideable(false);
 
         mapBottomSheet.setPeekHeight(360);
         mapBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -275,6 +277,8 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
             }
         });
 
+
+
         return view;
     }
 
@@ -301,6 +305,10 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
         Log.i("19621795_", "Pause");
     }
 
+    public CustomMapView getMap() {
+        return map;
+    }
+
     @Override
     public void onBuildingsReceived(List<Building> buildings) {
         Log.i("19621795_", "Buildings received");
@@ -318,7 +326,8 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
         map.drawBuildingsPolygons();
         map.drawRoomPolygons(0);
         map.removeRoomPolygons();
-        listDestinationItemsAdapter = new ListDestinationItemsAdapter(getContext(), this.rooms);
+        listDestinationItemsAdapter = new DestinationItemsAdapter(getContext(), this.rooms);
+        listDestinationItemsAdapter.setDestinationObjectClickListener(this);
         destinationsListView.setAdapter(listDestinationItemsAdapter);
         listDestinationItemsAdapter.notifyDataSetChanged();
 
@@ -328,7 +337,7 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
     @Override
     public void onBuildingsReceiveFailure(Throwable t) {
         buildingRepository.getAllBuildings(MapFragment.this);
-        Log.i("19621795_", "Buildings NOT received." + t.getMessage());
+        Log.e("19621795", "Buildings NOT received." + t.getMessage());
     }
 
     @Override
@@ -339,7 +348,6 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
     @Override
     public void onBuildingDetailsReceived(BuildingDetails buildingDetails) {
         bottomSheet.setVisibility(View.VISIBLE);
-        //mapBottomSheet.setHideable(false);
         mapBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
         TextView title = (TextView) bottomSheet.findViewById(R.id.bottom_sheet_title);
         TextView subTitle = (TextView) bottomSheet.findViewById(R.id.bottom_sheet_sub_title);
@@ -358,7 +366,7 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
 
     @Override
     public void onBuildingDetailsReceiveFailure(Throwable t) {
-        Log.i("19621795_", "Building Details NOT received." + t.getMessage());
+        Log.e("19621795", "Building Details NOT received." + t.getMessage());
         bottomSheet.setVisibility(View.INVISIBLE);
         mapBottomSheet.setHideable(true);
         mapBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -366,14 +374,12 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
 
     @Override
     public void onRoomClick(Room room) {
-        Log.i("19621795_", "Room clicked");
         roomRepository.getRoomDetails(room.getId(), MapFragment.this);
     }
 
     @Override
     public void onRoomDetailsReceived(RoomDetails roomDetails) {
         bottomSheet.setVisibility(View.VISIBLE);
-        //mapBottomSheet.setHideable(false);
         mapBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
         TextView title = (TextView) bottomSheet.findViewById(R.id.bottom_sheet_title);
         TextView subTitle = (TextView) bottomSheet.findViewById(R.id.bottom_sheet_sub_title);
@@ -392,17 +398,44 @@ public class MapFragment extends Fragment implements IBuildingsCallback, IRoomsC
 
     @Override
     public void onRoomDetailsReceiveFailure(Throwable t) {
-        Log.i("19621795_", "Room Details NOT received." + t.getMessage());
+        Log.e("19621795", "Room Details NOT received." + t.getMessage());
         bottomSheet.setVisibility(View.INVISIBLE);
         mapBottomSheet.setHideable(true);
         mapBottomSheet.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
-    public static void longInfo(String str) {
-        if (str.length() > 4000) {
-            Log.i("19621795_", str.substring(0, 4000));
-            longInfo(str.substring(4000));
-        } else
-            Log.i("19621795_", str);
+    @Override
+    public void onDirectionObjectClicked(Room room) {
+        Log.i("19621795_", "Clicked on " + room.getLabel().getText());
+        Navigation navigation = new Navigation(this, map.getSelectedRoomPolygon().getRoom(), room);
+        navigation.navigateInit();
+    }
+
+    public void showDestinationChoseLayout() {
+        Animation animation = new AlphaAnimation(0f, 1f);
+        animation.setDuration(300);
+        destinationChoseLayout.startAnimation(animation);
+        destinationChoseLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void hideDestinationChoseLayout() {
+        Animation animation = new AlphaAnimation(1f, 0f);
+        animation.setDuration(300);
+        destinationChoseLayout.startAnimation(animation);
+        destinationChoseLayout.setVisibility(View.GONE);
+    }
+
+    public void showBottomSheet() {
+        Animation animation = new AlphaAnimation(0f, 1f);
+        animation.setDuration(300);
+        bottomSheet.startAnimation(animation);
+        bottomSheet.setVisibility(View.VISIBLE);
+    }
+
+    public void hideBottomSheet() {
+        Animation animation = new AlphaAnimation(1f, 0f);
+        animation.setDuration(300);
+        bottomSheet.startAnimation(animation);
+        bottomSheet.setVisibility(View.GONE);
     }
 }

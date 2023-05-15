@@ -2,16 +2,16 @@ package com.tuvarna.mytu.models;
 
 public class GraphNode {
     private int id;
-    private double Latitude;
-    private double Longitude;
+    private double latitude;
+    private double longitude;
     private boolean isValid;
     private boolean disabledPeople;
     private boolean forStudents;
 
     public GraphNode(int id, double latitude, double longitude, boolean isValid, boolean disabledPeople, boolean forStudents) {
         this.id = id;
-        Latitude = latitude;
-        Longitude = longitude;
+        latitude = latitude;
+        longitude = longitude;
         this.isValid = isValid;
         this.disabledPeople = disabledPeople;
         this.forStudents = forStudents;
@@ -26,19 +26,19 @@ public class GraphNode {
     }
 
     public double getLatitude() {
-        return Latitude;
+        return latitude;
     }
 
     public void setLatitude(double latitude) {
-        Latitude = latitude;
+        latitude = latitude;
     }
 
     public double getLongitude() {
-        return Longitude;
+        return longitude;
     }
 
     public void setLongitude(double longitude) {
-        Longitude = longitude;
+        longitude = longitude;
     }
 
     public boolean isValid() {
@@ -69,8 +69,8 @@ public class GraphNode {
     public String toString() {
         return "GraphNode{" +
                 "id=" + id +
-                ", Latitude=" + Latitude +
-                ", Longitude=" + Longitude +
+                ", Latitude=" + latitude +
+                ", Longitude=" + longitude +
                 ", isValid=" + isValid +
                 ", disabledPeople=" + disabledPeople +
                 ", forStudents=" + forStudents +

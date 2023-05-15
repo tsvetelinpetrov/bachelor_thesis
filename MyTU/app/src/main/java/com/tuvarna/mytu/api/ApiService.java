@@ -4,6 +4,7 @@ import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.BuildingDetails;
 import com.tuvarna.mytu.models.ChatMessage;
 import com.tuvarna.mytu.models.ChatRequestMessage;
+import com.tuvarna.mytu.models.NavigationRoute;
 import com.tuvarna.mytu.models.ScheduleDay;
 import com.tuvarna.mytu.models.RoomDetails;
 
@@ -21,6 +22,9 @@ public interface ApiService {
 
     @GET("api/Building/details/{id}")
     Call<BuildingDetails> getBuildingDetails(@Path("id") int buildingId);
+
+    @GET("api/Navigation/getRoute/{startNodeId}/{endNodeId}")
+    Call<NavigationRoute> getRoomDetails(@Path("startNodeId") int startNodeId, @Path("endNodeId") int endNodeId);
 
     @GET("api/Room/details/{id}")
     Call<RoomDetails> getRoomDetails(@Path("id") int roomId);

@@ -18,7 +18,7 @@ import com.tuvarna.mytu.adapters.ChatMessageAdapter;
 import com.tuvarna.mytu.models.ChatMessage;
 import com.tuvarna.mytu.models.ChatRequestMessage;
 import com.tuvarna.mytu.repositories.ChatBotRepository;
-import com.tuvarna.mytu.repositories.IChatBotCallback;
+import com.tuvarna.mytu.listeners.callback.IChatBotCallback;
 import com.tuvarna.mytu.util.Constants;
 
 import java.util.ArrayList;

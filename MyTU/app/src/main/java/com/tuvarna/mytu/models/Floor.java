@@ -3,8 +3,8 @@ package com.tuvarna.mytu.models;
 import java.util.List;
 
 public class Floor {
-    List<Room> rooms;
-    int level;
+    private List<Room> rooms;
+    private int level;
 
     public Floor(List<Room> rooms, int level) {
         this.rooms = rooms;

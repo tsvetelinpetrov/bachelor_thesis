@@ -10,16 +10,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tuvarna.mytu.R;
+import com.tuvarna.mytu.listeners.click.IDestinationObjectClickListener;
 import com.tuvarna.mytu.models.Room;
 import com.tuvarna.mytu.util.IconSelector;
 
 import java.util.ArrayList;
 
-public class ListDestinationItemsAdapter extends BaseAdapter {
+public class DestinationItemsAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<Room> rooms;
+    private IDestinationObjectClickListener destinationObjectClickListener;
 
-    public ListDestinationItemsAdapter(Context context, ArrayList<Room> rooms) {
+    public DestinationItemsAdapter(Context context, ArrayList<Room> rooms) {
         this.context = context;
         this.rooms = rooms;
     }
@@ -60,6 +62,16 @@ public class ListDestinationItemsAdapter extends BaseAdapter {
         destinationTextView.setText(room.getLabel().getText());
         destinationDescriptionTextView.setText(room.getLabel().getSubText());
 
+        listDestinationItemHolder.setOnClickListener(v -> {
+            if(destinationObjectClickListener != null) {
+                destinationObjectClickListener.onDirectionObjectClicked(room);
+            }
+        });
+
         return convertView;
+    }
+
+    public void setDestinationObjectClickListener(IDestinationObjectClickListener destinationObjectClickListener) {
+        this.destinationObjectClickListener = destinationObjectClickListener;
     }
 }

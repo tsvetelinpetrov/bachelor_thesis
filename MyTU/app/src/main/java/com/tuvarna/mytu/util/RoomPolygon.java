@@ -10,11 +10,6 @@ public class RoomPolygon extends Polygon {
     int floor;
     Marker labelMarker;
 
-    public RoomPolygon() {
-        this.room = null;
-        this.floor = 0;
-    }
-
     public RoomPolygon(Room room, int floor, Marker labelMarker) {
         this.room = room;
         this.floor = floor;

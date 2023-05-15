@@ -3,7 +3,7 @@ package com.tuvarna.mytu.repositories;
 import androidx.annotation.NonNull;
 
 import com.tuvarna.mytu.api.ApiService;
-import com.tuvarna.mytu.models.BuildingDetails;
+import com.tuvarna.mytu.listeners.callback.IRoomsCallback;
 import com.tuvarna.mytu.models.RoomDetails;
 import com.tuvarna.mytu.util.Constants;
 

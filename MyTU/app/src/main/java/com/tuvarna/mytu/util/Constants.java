@@ -15,4 +15,11 @@ public class Constants {
     public final static GeoPoint MAP_STARTING_POINT = new GeoPoint(43.223401, 27.935145); // Default 43.223401, 27.935145
     public final static String MAP_POLYGON_SELECT_STROKE_COLOR = "#FF9C00";
 
+
+    public final static float MAP_ROUTE_POLYGON_STROKE_WIDTH = 10f;
+    // Distance between route arrows in pixels
+    public final static int ARROW_INTERVAL = 200;
+    // Size of the route arrow in dp
+    public final static int ARROW_SIZE_DP = 10;
+
 }

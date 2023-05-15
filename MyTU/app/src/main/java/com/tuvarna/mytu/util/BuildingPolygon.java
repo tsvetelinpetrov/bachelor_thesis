@@ -14,11 +14,6 @@ public class BuildingPolygon extends Polygon {
         this.labelMarker = null;
     }
 
-    public BuildingPolygon(Building building) {
-        this.building = building;
-        this.labelMarker = null;
-    }
-
     public BuildingPolygon(Building building, Marker labelMarker) {
         this.building = building;
         this.labelMarker = labelMarker;

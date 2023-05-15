@@ -1,4 +1,4 @@
-package com.tuvarna.mytu.repositories;
+package com.tuvarna.mytu.listeners.callback;
 
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.BuildingDetails;

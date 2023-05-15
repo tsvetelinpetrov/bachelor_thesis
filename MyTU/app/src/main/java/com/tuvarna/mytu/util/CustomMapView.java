@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tuvarna.mytu.R;
+import com.tuvarna.mytu.listeners.callback.IMapObjectClickListener;
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.Floor;
 import com.tuvarna.mytu.models.Room;
@@ -26,6 +27,7 @@ import org.osmdroid.tileprovider.MapTileProviderBase;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Polyline;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -33,13 +35,14 @@ import java.util.List;
 
 public class CustomMapView extends MapView {
 
-    List<Building> buildings = new ArrayList<>();
+    private List<Building> buildings = new ArrayList<>();
     private int level = 0;
     private double lastZoomLevelBuildingDrawn = 0;
     private List<BuildingPolygon> buildingPolygons = new ArrayList<>();
     private List<RoomPolygon> roomPolygons = new ArrayList<>();
     private BuildingPolygon selectedBuildingPolygon = null;
     private RoomPolygon selectedRoomPolygon = null;
+    private ArrowPolyline routePolyline = new ArrowPolyline(this.getContext(), new ArrayList<>());
 
     public CustomMapView(Context context, MapTileProviderBase tileProvider,
                          Handler tileRequestCompleteHandler, AttributeSet attrs) {
@@ -75,6 +78,14 @@ public class CustomMapView extends MapView {
 
     public void addBuilding(Building building) {
         this.buildings.add(building);
+    }
+
+    public ArrowPolyline getRoutePolyline() {
+        return routePolyline;
+    }
+
+    public void setRoutePolyline(ArrowPolyline routePolyline) {
+        this.routePolyline = routePolyline;
     }
 
     public void setLevel(int level) {
@@ -205,7 +216,7 @@ public class CustomMapView extends MapView {
         this.getOverlays().add(mRotationGestureOverlay);
     }
 
-    public void generateBuildingPolygons(List<Building> buildings, MapObjectClicker callback) {
+    public void generateBuildingPolygons(List<Building> buildings, IMapObjectClickListener callback) {
         for(Building building : buildings) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             View markerLayout = inflater.inflate(R.layout.custom_marker_layout, null);
@@ -272,7 +283,7 @@ public class CustomMapView extends MapView {
         return bitmap;
     }
 
-    public void generateRoomPolygons(List<Building> buildings, MapObjectClicker callback) {
+    public void generateRoomPolygons(List<Building> buildings, IMapObjectClickListener callback) {
         for(Building building : buildings) {
             for (Floor fl : building.getFloors()) {
                 for (Room room : fl.getRooms()) {

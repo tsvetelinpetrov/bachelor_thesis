@@ -3,6 +3,7 @@ package com.tuvarna.mytu.repositories;
 import androidx.annotation.NonNull;
 
 import com.tuvarna.mytu.api.ApiService;
+import com.tuvarna.mytu.listeners.callback.IBuildingsCallback;
 import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.BuildingDetails;
 import com.tuvarna.mytu.util.Constants;
@@ -23,7 +24,6 @@ public class BuildingRepository implements IBuildingRepository {
     OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
     public BuildingRepository() {
-
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         httpClient.addInterceptor(loggingInterceptor);
 

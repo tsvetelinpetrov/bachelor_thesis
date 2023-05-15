@@ -23,7 +23,7 @@ import com.tuvarna.mytu.adapters.DayScheduleAdapter;
 import com.tuvarna.mytu.models.ScheduleClass;
 import com.tuvarna.mytu.models.ScheduleDay;
 import com.tuvarna.mytu.repositories.DayScheduleRepository;
-import com.tuvarna.mytu.repositories.IDayScheduleCallback;
+import com.tuvarna.mytu.listeners.callback.IDayScheduleCallback;
 
 import java.util.ArrayList;
 import java.util.Arrays;
