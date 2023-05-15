@@ -22,6 +22,10 @@
     <string name="ts_petrov">Tsvetelin Petrov</string>
     <string name="hello_blank_fragment">Test</string>
 
+    <string name="day_name">Monday</string>
+    <string name="show_schedule">Покажи разписанието</string>
+    <string name="hidden_schedule">Промени търсенето</string>
+
     <string-array name="floor_array">
         <item>-1</item>
         <item>0</item>
@@ -30,5 +34,24 @@
         <item>3</item>
         <item>4</item>
         <item>5</item>
+    </string-array>
+
+    <string-array name="course_array">
+        <item>курс 1 </item>
+        <item>курс 2</item>
+        <item>курс 3</item>
+        <item>курс 4</item>
+    </string-array>
+    <string-array name="specialty_array">
+        <item>СИТ </item>
+        <item>КСТ </item>
+    </string-array>
+    <string-array name="group_array">
+        <item>Група 1 </item>
+        <item>Група 2</item>
+        <item>Група 3</item>
+        <item>Група 4</item>
+        <item>Група 5</item>
+        <item>Група 6</item>
     </string-array>
 </resources>

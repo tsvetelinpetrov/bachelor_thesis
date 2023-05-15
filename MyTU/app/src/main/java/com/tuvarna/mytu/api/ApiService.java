@@ -4,6 +4,7 @@ import com.tuvarna.mytu.models.Building;
 import com.tuvarna.mytu.models.BuildingDetails;
 import com.tuvarna.mytu.models.ChatMessage;
 import com.tuvarna.mytu.models.ChatRequestMessage;
+import com.tuvarna.mytu.models.ScheduleDay;
 import com.tuvarna.mytu.models.RoomDetails;
 
 import java.util.List;
@@ -24,7 +25,9 @@ public interface ApiService {
     @GET("api/Room/details/{id}")
     Call<RoomDetails> getRoomDetails(@Path("id") int roomId);
 
-    // POST docs how to pass parameters
+    @GET("api/DaySchedules/{course}/{specialty}/{group}")
+    Call<List<ScheduleDay>> getDaySchedules(@Path("course") String course, @Path("specialty") String specialty, @Path("group") String group);
+
     @POST("webhooks/rest/webhook")
     Call<List<ChatMessage>> sendChatBotMessage(@Body ChatRequestMessage message);
 }
