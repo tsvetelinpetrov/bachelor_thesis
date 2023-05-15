@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyTU_api.Infrastructure;
 
@@ -10,9 +11,11 @@ using MyTU_api.Infrastructure;
 namespace MyTU_api.Infrastructure.Migrations
 {
     [DbContext(typeof(MyTU_apiDbContext))]
-    partial class MyTU_apiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230515021338_RemoveSubTitleRoomBuildingDetails")]
+    partial class RemoveSubTitleRoomBuildingDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

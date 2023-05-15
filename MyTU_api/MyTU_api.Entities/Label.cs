@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string Text { get; set; }
+        public string SubText { get; set; }
         public string MapText { get; set; }
         public int Size { get; set; }
         public int BgColor { get; set; }

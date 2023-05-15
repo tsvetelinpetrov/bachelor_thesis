@@ -27,7 +27,6 @@ namespace MyTU_api.Repositories
                         Label = r.Room.Label
                     },
                     ImageUrl = (r != null && r.ImageUrl != null && r.ImageUrl != "") ? "http://creativecode.tu-varna.bg/mapsource/images/" + r.ImageUrl : null,
-                    SubTitle = r.SubTitle,
                     Description = r.Description
                 })
                 .FirstOrDefaultAsync();

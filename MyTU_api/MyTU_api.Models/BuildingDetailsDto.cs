@@ -7,7 +7,6 @@ namespace MyTU_api.Models
         public int Id { get; set; }
         public Building Building { get; set; }
         public String ImageUrl { get; set; }
-        public String SubTitle { get; set; }
         public String Description { get; set; }
     }
 }
