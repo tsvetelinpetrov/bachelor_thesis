@@ -14,11 +14,11 @@ namespace MyTU_api.Controllers
             _navigationService = navigationService;
         }
 
-        // GET: api/<NavigationController>/getRoute/<locationType1>/<locationType2>/locationId1/locationId2
-        [HttpGet("getRoute/{locationType1}/{locationType2}/{locationId1}/{locationId2}")]
-        public async Task<IActionResult> GetRoute(int locationType1, int locationType2, int locationId1, int locationId2)
+        // GET: api/<NavigationController>/getRoute/startNodeId/endNodeId
+        [HttpGet("getRoute/{startNodeId}/{endNodeId}")]
+        public async Task<IActionResult> GetRoute(int startNodeId, int endNodeId)
         {
-            NavigationRouteDto route = await _navigationService.GenerateRoute(locationType1, locationType2, locationId1, locationId2);
+            NavigationRouteDto route = await _navigationService.GenerateRoute(startNodeId, endNodeId);
             return Ok(route);
         }
 

@@ -16,7 +16,7 @@ namespace MyTU_api.Services
             _logger = logger;
         }
 
-        public async Task<NavigationRouteDto> GenerateRoute(int locationType1, int locationType2, int node1Id, int node2Id)
+        public async Task<NavigationRouteDto> GenerateRoute(int startNodeId, int endNodeId)
         {
             var graphNodes = await _navigationRepository.GetGraphNodes();
             var graphNodeEdges = await _navigationRepository.GetGraphNodeEdges();
@@ -28,7 +28,7 @@ namespace MyTU_api.Services
             //List<Tuple<int, int>> invalidEdges = new List<Tuple<int, int>> { Tuple.Create(7, 5) };
             List<int> invalidNodes = new List<int> {};
             List<Tuple<int, int>> invalidEdges = new List<Tuple<int, int>> {};
-            NavigationRouteDto shortestPath = navigarionGraph.ShortestPath(node1Id - 1, node2Id - 1, invalidNodes, invalidEdges);
+            NavigationRouteDto shortestPath = navigarionGraph.ShortestPath(startNodeId - 1, endNodeId - 1, invalidNodes, invalidEdges);
 
             foreach (var edge in graphNodeEdges.ToList())
             {
