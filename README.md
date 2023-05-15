@@ -115,6 +115,7 @@
 <img src="src/demo_1.jpg" alt="Демо" width="100%">
 <img src="src/demo_2.jpg" alt="Демо" width="100%">
 <img src="src/demo_3.jpg" alt="Демо" width="100%">
+<img src="src/demo_4.png" alt="Демо" width="100%">
   
 
 <p align="right">(<a href="#top">нагоре</a>)</p>
