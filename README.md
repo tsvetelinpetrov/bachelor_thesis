@@ -89,7 +89,7 @@
 <img src="src/nuk_graph.jpg" alt="NUK Graph" width="100%">
 
 Обновяването на текущото местоположение на потребителя ще се извършва чрез сканиране на QR код или чрез прочитане на NFC таг. Кодовете и таговете ще бъдат разположени на ключови места, отговарящи и на графа за търсене на път.
-<img src="src/nuk_nfc.jpg" alt="NUK BFC Tag" width="100%">
+<img src="src/tv_graph.png" alt="NUK BFC Tag" width="100%">
 
 ### DB Model
 <img src="src/db_model.jpg" alt="DB Model" width="100%">
@@ -100,9 +100,7 @@
 ### Прототип
 <img src="src/example_ui1.png" alt="Prototype" width="100%">
 
-! Wireframe и прототипните изображения не са напълно съответстващи на описанието по-горе. Ще ги редактирам скоро !
-
-
+! Wireframe и прототипните изображения са от първоначалното планиране. Крайният продукт не изглежда точно така.
 
   
 <p align="right">(<a href="#top">нагоре</a>)</p>  
