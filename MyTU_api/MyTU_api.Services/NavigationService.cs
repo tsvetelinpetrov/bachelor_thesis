@@ -24,7 +24,7 @@ namespace MyTU_api.Services
             navigarionGraph.SetNodes(graphNodes.ToList());
             navigarionGraph.SetEdges(graphNodeEdges.ToList());
 
-            //List<int> invalidNodes = new List<int> { 2, 4 };
+            //List<int> invalidNodes = new List<int> { 85 };
             //List<Tuple<int, int>> invalidEdges = new List<Tuple<int, int>> { Tuple.Create(7, 5) };
             List<int> invalidNodes = new List<int> {};
             List<Tuple<int, int>> invalidEdges = new List<Tuple<int, int>> {};
